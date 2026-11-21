@@ -1,7 +1,5 @@
-# Netlify settings. Only the "public" folder is published as the website;
-# server.py, data.json and everything else stay private.
 [build]
-  publish = "public"
+  publish = "."
   functions = "netlify/functions"
 
 [functions]
