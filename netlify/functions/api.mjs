@@ -1,6 +1,6 @@
 // Netlify Function: answers every request to /api/* for the online version.
 import { getStore } from "@netlify/blobs";
-import { handle } from "../lib/core.mjs";
+import { handle } from "../../core.mjs";
 
 const env = (k) => globalThis.Netlify?.env?.get(k) ?? process.env[k];
 
