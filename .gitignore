@@ -1,0 +1,7 @@
+# Local data - never upload (contains names and phone numbers)
+data.json
+checkins.json
+*.tmp
+node_modules/
+.netlify/
+.claude/

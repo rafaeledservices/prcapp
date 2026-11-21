@@ -1,0 +1,1569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parent Resource Centers</title>
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg:#f5f7fa; --surface:#fff; --text:#1f2937; --muted:#64748b; --border:#e2e8f0; --soft:#f1f5f9;
+  --navy:#16365c; --green:#10b981; --green-d:#047857; --green-50:#ecfdf5; --green-100:#d1fae5;
+  --danger:#dc2626; --danger-50:#fef2f2; --amber:#b45309; --amber-50:#fffbeb; --blue:#1d4ed8; --blue-50:#eff6ff;
+  --radius:12px; --shadow:0 1px 2px rgba(15,23,42,.05),0 1px 3px rgba(15,23,42,.07);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+:focus-visible{outline:3px solid #6ee7b7;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+svg.i{flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Layout ---------- */
+.layout{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.side{background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:20px;padding:20px 14px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px;text-decoration:none}
+.brand img{width:46px;height:46px;flex:none;object-fit:contain}
+@media (min-width:961px){
+  .brand{flex-direction:column;text-align:center;gap:8px;padding:4px 8px 16px;border-bottom:1px solid var(--border)}
+  .brand img{width:110px;height:110px}
+  .brand b{font-size:16px}
+}
+.brand b{color:var(--navy);font-size:15px;line-height:1.2}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:#475569;text-decoration:none;font-weight:600;font-size:14px}
+.nav a:hover{background:var(--soft);color:var(--text)}
+.nav a.active{background:var(--green-50);color:var(--green-d)}
+.nav .n{margin-left:auto;font-size:12px;background:var(--soft);color:var(--muted);border-radius:10px;padding:0 8px}
+.nav .n.warn{background:#fef3c7;color:var(--amber);font-weight:700}
+.nav .ng{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;padding:14px 10px 4px}
+.nav .ng:first-child{padding-top:0}
+.nav a.active .n{background:var(--green-100);color:var(--green-d)}
+.side .foot{margin-top:auto;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);padding:0 8px}
+main{padding:28px 32px 48px;width:100%;max-width:1320px;min-width:0}
+@media (max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .side{height:auto;z-index:20;padding:10px 12px 0;gap:6px;border-right:0;border-bottom:1px solid var(--border)}
+  .nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+  .nav a{white-space:nowrap}
+  .nav .ng{display:none}
+  .side .foot{display:none}
+  main{padding:20px 16px 40px}
+}
+
+/* ---------- Page header ---------- */
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 16px;margin-bottom:20px}
+.crumbs{font-size:13px;color:var(--muted);margin-bottom:4px}
+.crumbs a{color:var(--muted);text-decoration:none}.crumbs a:hover{color:var(--green-d);text-decoration:underline}
+.ph h1{margin:0;font-size:26px;line-height:1.2;color:var(--navy)}
+.ph p{margin:4px 0 0;color:var(--muted);max-width:640px}
+.ph .acts{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;border-radius:8px;padding:9px 14px;font-family:inherit;font-size:14px;font-weight:600;line-height:1.2;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .15s,border-color .15s}
+.btn.primary{background:var(--green);color:#fff}.btn.primary:hover{background:#059669}
+.btn.secondary{background:#fff;color:var(--text);border-color:#cbd5e1}.btn.secondary:hover{background:var(--soft)}
+.btn.danger{background:var(--danger);color:#fff}.btn.danger:hover{background:#b91c1c}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.ibtn{width:34px;height:34px;display:inline-grid;place-items:center;border-radius:8px;border:0;background:transparent;color:var(--muted);cursor:pointer;text-decoration:none}
+.ibtn:hover{background:var(--soft);color:var(--text)}
+.ibtn.del:hover{background:var(--danger-50);color:var(--danger)}
+
+/* ---------- Inputs ---------- */
+input,select,textarea{font-family:inherit;font-size:14px;width:100%;min-height:42px;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:var(--text)}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.2)}
+input::placeholder,textarea::placeholder{color:#94a3b8}
+
+/* ---------- Toolbar ---------- */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.search{position:relative;flex:1 1 260px;max-width:400px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search input{padding-left:38px}
+.toolbar select{width:auto;min-width:150px;flex:0 1 auto}
+.count{margin-left:auto;font-size:13px;color:var(--muted)}
+
+/* ---------- Cards & tables ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card.pad{padding:18px 20px}
+.card .hd{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px;border-bottom:1px solid var(--border)}
+.card .hd h3{margin:0;font-size:16px}
+.stack>*+*{margin-top:16px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:#f8fafc;padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#f8fafc}
+td.act{text-align:right;white-space:nowrap;width:1%}
+td.nowrap{white-space:nowrap}
+.sub{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.muted{color:var(--muted)}
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:520px;color:#475569}
+.who{display:flex;align-items:center;gap:10px}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+a.lnk{color:var(--text);font-weight:600;text-decoration:none}a.lnk:hover{color:var(--green-d);text-decoration:underline}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;background:var(--soft);color:#475569;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--green-50);color:var(--green-d)}.pill.warn{background:var(--amber-50);color:var(--amber)}
+.pill.bad{background:var(--danger-50);color:#b91c1c}.pill.info{background:var(--blue-50);color:var(--blue)}
+.tag{display:inline-block;font-size:12px;font-weight:600;background:var(--blue-50);color:var(--blue);border-radius:6px;padding:1px 8px}
+.code{display:inline-block;font-family:ui-monospace,Consolas,monospace;font-size:13px;font-weight:600;color:var(--navy);background:var(--soft);border-radius:6px;padding:1px 7px}
+.cap{min-width:130px}
+.cap .l{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;margin-bottom:5px}
+.bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:3px}
+.bar.warn i{background:#f59e0b}.bar.full i{background:var(--danger)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty .ic{width:54px;height:54px;border-radius:50%;background:var(--soft);display:grid;place-items:center;margin:0 auto 12px}
+.empty h4{margin:0 0 4px;font-size:16px;color:var(--text)}
+.empty p{margin:0 0 16px}
+
+/* Tables become cards on narrow screens */
+@media (max-width:760px){
+  table.rsp thead{display:none}
+  table.rsp,table.rsp tbody,table.rsp tr,table.rsp td{display:block;width:100%}
+  table.rsp tr{padding:8px 0;border-bottom:1px solid var(--border)}
+  table.rsp tbody tr:last-child{border-bottom:0}
+  table.rsp td{border:0;padding:6px 16px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+  table.rsp td::before{content:attr(data-label);font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted);flex:none}
+  table.rsp td>.cv{text-align:right;min-width:0}
+  table.rsp td.first::before{content:none}
+  table.rsp td.first>.cv{text-align:left}
+  table.rsp td.act{width:100%;justify-content:flex-end}
+  table.rsp td.act::before{content:none}
+  .clamp{max-width:none}
+  .cap{min-width:150px}
+}
+
+/* ---------- Forms ---------- */
+.panel{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;margin-bottom:16px}
+.panel header h3{margin:0;font-size:16px}
+.panel header p{margin:4px 0 0;font-size:13.5px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px;align-content:start}
+.f.full{grid-column:1/-1}
+.f>label,.f>.lb{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.reqdot{color:var(--danger)}
+.help{display:block;font-size:12.5px;color:var(--muted);margin-top:5px}
+.err{display:block;font-size:12.5px;font-weight:600;color:var(--danger);margin-top:5px}
+.err:empty{display:none}
+.f.invalid input,.f.invalid select,.f.invalid textarea{border-color:var(--danger);background:var(--danger-50)}
+.seg{display:inline-flex;gap:3px;padding:3px;border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc}
+.seg label{position:relative;cursor:pointer;margin:0}
+.seg input{position:absolute;opacity:0;width:1px;height:1px;min-height:0}
+.seg label>span{display:block;padding:7px 18px;border-radius:7px;font-size:14px;font-weight:600;color:var(--muted)}
+.seg input:checked+span{background:#fff;color:var(--green-d);box-shadow:var(--shadow)}
+.seg input:focus-visible+span{outline:3px solid #6ee7b7}
+.formbar{position:sticky;bottom:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:8px -32px 0;padding:14px 32px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-top:1px solid var(--border)}
+.formbar .btns{display:flex;gap:8px;margin-left:auto}
+@media (max-width:1000px){.panel{grid-template-columns:1fr;gap:14px}}
+@media (max-width:960px){.formbar{margin:8px -16px 0;padding:12px 16px}}
+@media (max-width:600px){.grid{grid-template-columns:1fr}.panel{padding:16px}.formbar .btns{width:100%}.formbar .btns .btn{flex:1}}
+
+/* ---------- Overview ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{display:flex;align-items:center;gap:12px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
+.stat:hover{border-color:var(--green);transform:translateY(-1px)}
+.stat .ic{width:42px;height:42px;border-radius:10px;background:var(--green-50);color:var(--green-d);display:grid;place-items:center;flex:none}
+.stat b{display:block;font-size:22px;line-height:1.1;color:var(--navy)}
+.stat span{font-size:13px;color:var(--muted)}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.cols{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:1000px){.cols{grid-template-columns:1fr}}
+.steps{list-style:none;margin:0;padding:6px 18px 12px}
+.steps li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border);font-size:14px}
+.steps li:last-child{border-bottom:0}
+.steps .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:var(--soft);color:var(--muted);flex:none}
+.steps li.done .dot{background:var(--green);color:#fff}
+.steps li.done .t{color:var(--muted)}
+.steps a{margin-left:auto;font-size:13px;font-weight:600;color:var(--green-d);text-decoration:none}
+.steps a:hover{text-decoration:underline}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stats.mini{grid-template-columns:repeat(2,minmax(0,1fr));margin:0}
+.stats.mini .stat{padding:12px}
+.ih{display:flex;align-items:center;gap:8px}
+.today{list-style:none;margin:0;padding:0}
+.today li{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 18px;border-top:1px solid var(--border)}
+.today li:first-child{border-top:0}
+.today .grow{flex:1;min-width:170px}
+.today .tt{width:64px;flex:none;text-align:center;line-height:1.2}
+.today .tt b{display:block;font-size:14px;color:var(--navy)}
+.today .cap{width:150px}
+
+/* ---------- Section detail ---------- */
+.infog{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+.infog>div{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px}
+.infog .k{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:6px}
+.infog .v{font-weight:600}
+td select{width:auto;min-width:140px;min-height:36px;padding:6px 10px}
+
+/* ---------- Bulk enrollment ---------- */
+.bulk{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.summary{position:sticky;top:20px}
+@media (max-width:1000px){.bulk{grid-template-columns:1fr}.summary{position:static}}
+.step{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:16px}
+.step span{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.card .hd .step{margin:0}
+.padx{padding:12px 18px}
+.pick{max-height:460px;overflow:auto;border-top:1px solid var(--border)}
+.pick label{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--border);cursor:pointer}
+.pick label:last-child{border-bottom:0}
+.pick label:hover{background:#f8fafc}
+.pick label.on{background:var(--green-50)}
+.pick label.dis{cursor:default;opacity:.6}
+.pick input{width:18px;height:18px;min-height:0;accent-color:var(--green);flex:none}
+.pick .grow{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{display:inline-flex;align-items:center;gap:2px;background:var(--green-50);color:#065f46;border-radius:999px;padding:3px 4px 3px 10px;font-size:13px;font-weight:600}
+.chip button{border:0;background:none;color:inherit;cursor:pointer;display:grid;place-items:center;border-radius:50%;padding:2px}
+.chip button:hover{background:var(--green-100)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.note{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:8px;font-size:13px;background:var(--amber-50);color:var(--amber);margin:12px 0}
+.note.info{background:var(--blue-50);color:var(--blue)}
+
+/* ---------- Toast & dialog ---------- */
+#toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,16px);display:flex;align-items:center;gap:8px;max-width:calc(100% - 32px);padding:12px 18px;border-radius:10px;background:#0f172a;color:#fff;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:.25s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.err{background:#b91c1c}
+#toast.act{pointer-events:auto}
+.tact{margin-left:6px;padding:5px 10px;border:0;border-radius:6px;background:rgba(255,255,255,.15);color:#fff;font:inherit;font-weight:700;text-decoration:none;cursor:pointer;white-space:nowrap}
+.tact:hover{background:rgba(255,255,255,.28)}
+dialog{border:0;border-radius:14px;padding:0;width:calc(100% - 32px);max-width:440px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(15,23,42,.45)}
+dialog form{padding:22px}
+dialog h3{margin:0 0 6px;font-size:18px}
+dialog p{margin:0 0 20px;color:var(--muted)}
+.dlg-acts{display:flex;justify-content:flex-end;gap:8px}
+
+/* ---------- Meeting times editor ---------- */
+.mt-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.mt-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.mt-row select{width:auto;min-width:150px}
+.mt-row input{width:auto;min-width:130px}
+.f.invalid .mt-row input{border-color:var(--danger)}
+
+/* ---------- Attendance ---------- */
+.ck-logo{display:block;width:120px;height:120px;margin:0 auto 12px;object-fit:contain}
+.small{font-size:13px}
+.h3{margin:0;font-size:16px}
+.pad{padding:18px 20px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto}
+.tabs button{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;margin-bottom:-1px;border:0;border-bottom:2px solid transparent;background:none;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--text)}
+.tabs button.on{color:var(--green-d);border-bottom-color:var(--green)}
+.att{display:grid;grid-template-columns:350px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:1000px){.att{grid-template-columns:minmax(0,1fr)}}
+.cal{border:1px solid var(--border);border-radius:10px;padding:8px 10px 10px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;padding-bottom:6px;margin-bottom:4px;border-bottom:1px solid var(--border)}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-g>span{padding:6px 0;font-size:12px;font-weight:700;color:var(--muted)}
+.day{position:relative;aspect-ratio:1;max-height:42px;border:0;border-radius:50%;background:none;font-family:inherit;font-size:14px;color:#94a3b8;cursor:pointer}
+.day:hover{background:var(--soft)}
+.day.cls{color:var(--text);font-weight:700;background:var(--green-50)}
+.day.out{opacity:.35}
+.day.today{box-shadow:inset 0 0 0 2px var(--green)}
+.day.sel{background:var(--green);color:#fff}
+.day i{position:absolute;left:50%;top:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#0ea5e9}
+.day.sel i{background:#fff}
+.cal-l{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:12px;color:var(--muted)}
+.lgd{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.lgd.cls{background:var(--green-50);border:1px solid #86efac}.lgd.dot{width:6px;height:6px;background:#0ea5e9;vertical-align:1px}
+.lgd.tdy{box-shadow:inset 0 0 0 2px var(--green)}
+.lgd.pnd{background:#fef3c7;border:1px solid #f59e0b}
+.day.blank{display:block;background:none;cursor:default}
+.day.blank:hover{background:none}
+.day.pend{background:#fef3c7;color:var(--amber)}
+.day.pend.sel{background:var(--green);color:#fff}
+.pendnote{flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.pendnote .chips{margin:0}
+.pchip{border:1px solid #fcd34d;background:#fff;color:var(--amber);cursor:pointer;padding:3px 10px;font-family:inherit}
+.pchip:hover,.pchip.on{background:#fef3c7}
+.daynav{gap:6px}
+.daynav .grow{flex:1;min-width:0}
+.daynav h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ibtn:disabled{opacity:.3;cursor:default;background:none}
+table.hist{font-size:13px}
+table.hist th,table.hist td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--border)}
+table.hist .hn{text-align:left;padding-left:18px;white-space:nowrap;font-weight:600;position:sticky;left:0;background:#fff;z-index:1}
+table.hist th button{border:0;background:none;font:inherit;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;padding:4px 6px;border-radius:6px;white-space:nowrap;line-height:1.2}
+table.hist th button small{display:block;font-weight:600}
+table.hist th button:hover{background:var(--soft);color:var(--text)}
+table.hist th.miss button{color:var(--amber);background:#fef3c7}
+table.hist tbody tr:hover{background:transparent}
+.hcell{width:28px;height:28px;border-radius:7px;border:0;font:inherit;font-size:12px;font-weight:700;cursor:pointer;display:inline-grid;place-items:center;background:var(--soft);color:var(--muted)}
+.hcell.ok{background:var(--green-100);color:var(--green-d)}.hcell.warn{background:#fef3c7;color:var(--amber)}
+.hcell.bad{background:#fee2e2;color:#b91c1c}.hcell.info{background:#dbeafe;color:var(--blue)}
+.hcell.miss{background:#fffbeb;color:#d97706;outline:1px dashed #fcd34d}
+.hcell.key{width:20px;height:20px;margin-right:5px;cursor:default;vertical-align:middle}
+.att-sum{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px}
+.roll{list-style:none;margin:0;padding:0}
+.roll li{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 18px;border-top:1px solid var(--border)}
+.roll li .who{flex:1;min-width:190px}
+.qrb{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--blue)}
+.att-seg label>span{padding:6px 12px}
+.att-seg input:checked+span.ok{background:var(--green);color:#fff}
+.att-seg input:checked+span.warn{background:#f59e0b;color:#fff}
+.att-seg input:checked+span.bad{background:var(--danger);color:#fff}
+.att-seg input:checked+span.info{background:#3b82f6;color:#fff}
+.pane-f{position:sticky;bottom:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--border);background:#fff}
+.pane-f .btns{display:flex;gap:8px}
+.pane-f .muted{display:inline-flex;align-items:center;gap:4px}
+@media (max-width:600px){.att-seg .lng{display:none}.att-seg label>span{padding:7px 13px}}
+.howto{margin:0 0 14px;padding-left:20px;line-height:1.8}
+.steps-in{margin:8px 0 10px;padding-left:20px;line-height:1.7}
+.trouble{margin:0 0 14px;font-size:13.5px}
+.trouble summary{cursor:pointer;font-weight:600;color:var(--blue)}
+.trouble ol{margin:8px 0 0;padding-left:20px;line-height:1.7;color:#475569}
+.side .foot a{color:var(--green-d);font-weight:600}
+.qr-wrap{display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px;padding:20px}
+.qr-box{text-align:center}
+#qr{display:inline-block;padding:12px;background:#fff;border:1px solid var(--border);border-radius:12px;min-width:120px;min-height:120px}
+#qr img,#qr canvas{display:block}
+.qr-side{flex:1;min-width:240px}
+.qr-side .note{margin-top:0}
+.copy{display:flex;gap:6px;margin-bottom:12px}
+.btns-row{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- Student check-in page ---------- */
+body.kiosk .side{display:none}
+body.kiosk .layout{display:block}
+body.kiosk main{max-width:none;padding:0}
+.ck{min-height:100vh;display:grid;place-items:center;padding:20px 16px;background:linear-gradient(160deg,var(--green-50),var(--bg) 60%)}
+.ck-card{width:100%;max-width:440px;padding:28px 24px;background:#fff;border-radius:18px;box-shadow:0 10px 40px rgba(15,23,42,.1);text-align:center}
+.ck-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;font-weight:700;color:var(--navy)}
+.ck h1{margin:0 0 8px;font-size:24px;line-height:1.25;color:var(--navy)}
+.ck h1 span{display:block;margin-top:4px;font-size:16px;font-weight:600;color:var(--muted)}
+.ck-meta{margin:0 0 22px;color:var(--muted)}
+.ck form{text-align:left}
+.ck .f{margin-bottom:14px}
+.ck label span{font-weight:500;color:var(--muted)}
+.ck input{min-height:52px;font-size:17px}
+.ck .err{margin:0 0 12px}
+.btn.lg{padding:14px 18px;font-size:16px}
+.ck-ic{width:76px;height:76px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;background:var(--green);color:#fff}
+.ck-ic.bad{background:var(--danger)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="side">
+    <a class="brand" href="#/overview"><img src="logo.png" alt="Madera Unified School District · Parent Resource Centers logo"><b>Parent Resource Centers</b></a>
+    <nav class="nav" id="nav" aria-label="Main"></nav>
+    <div class="foot" id="foot"></div>
+  </aside>
+  <main id="app"></main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"><form method="dialog"><h3 id="dlgT"></h3><p id="dlgM"></p>
+  <div class="dlg-acts"><button class="btn secondary" value="cancel" id="dlgC">Cancel</button><button class="btn danger" value="ok" id="dlgO">Delete</button></div></form></dialog>
+
+<script>
+/* ================= Storage ================= */
+let db;
+const KEY='prc-school-v1';
+const CORE=['terms','courses','sections','students','enrollments'];
+const TABLES=[...CORE,'attendance','sessions'];
+function normalize(d){
+  TABLES.forEach(t=>d[t]=d[t]||[]); d.seq=d.seq||{}; d.ckImported=d.ckImported||[];
+  d.sections.forEach(s=>s.meetings=s.meetings||[]);
+  // QR check-ins only stay open on the day of the class
+  d.sessions.forEach(s=>{ if(s.open&&s.date<today()) s.open=false; });
+  // Migration: courses used to get their code from a separate "Subjects" list (e.g. COML + 1 = COML-1)
+  if(Array.isArray(d.subjects)){
+    d.courses.forEach(c=>{ if(!c.code){ const s=d.subjects.find(x=>x.id===c.subject_id); c.code=s?`${s.code}-${c.course_number||1}`:''; } });
+    delete d.subjects; delete d.seq.subjects;
+  }
+  d.courses.forEach(c=>{ delete c.subject_id; delete c.course_number; delete c.credits; });
+  // Migration: grades are now a single Pass / No pass result
+  d.enrollments.forEach(e=>{
+    const g=String(e.final_grade||'').trim().toUpperCase();
+    e.result=e.result||(g==='P'||g==='PASS'?'pass':g==='NP'||g==='NO PASS'?'no_pass':'');
+    delete e.grading_scale; delete e.final_numeric; delete e.final_grade;
+  });
+  return d;
+}
+function blank(){ return normalize({}); }
+function load(){ try{ const s=localStorage.getItem(KEY); if(s) return normalize(JSON.parse(s)); }catch(e){} return seed(); }
+// Online (cloud) mode keeps the data only on the server, never in this browser
+function save(){ if(!CLOUD){ try{ localStorage.setItem(KEY,JSON.stringify(db)); }catch(e){} } pushServer(); }
+function nextId(t){ db.seq[t]=(db.seq[t]||0)+1; return db.seq[t]; }
+function insert(t,r){ r.id=nextId(t); db[t].push(r); return r; }
+const get=(t,id)=>db[t].find(r=>r.id===Number(id));
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const today=()=>iso(new Date());
+const nowLocal=()=>{ const d=new Date(); return `${iso(d)}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`; };
+
+/* ================= Optional local server (server.py) ================= */
+// When the app is opened from server.py, data is also stored on this computer's server
+// so phones on the same Wi-Fi can check in with the QR code.
+// Two server types:
+//  - local: server.py on this computer (Iniciar.bat), phones on the same Wi-Fi
+//  - cloud: the online version (Netlify), staff sign in with a password, phones from anywhere
+let API=null, SYNC=false, CLOUD=false, REV=0, putTimer, putBusy=false, putAgain=false, retryTimer;
+const AUTH_KEY='prc-staff-session';
+const authToken=()=>{ try{ return localStorage.getItem(AUTH_KEY)||''; }catch(e){ return ''; } };
+async function api(path,opt={}){
+  const headers={...(opt.headers||{})};
+  if(CLOUD&&authToken()) headers.Authorization='Bearer '+authToken();
+  const r=await fetch(path,{cache:'no-store',...opt,headers});
+  const j=await r.json().catch(()=>null);
+  if(r.status===401&&CLOUD&&!/\/api\/(login|checkin|session)/.test(path)) needLogin();
+  return {ok:r.ok,status:r.status,data:j};
+}
+function pushServer(){ if(!SYNC) return; clearTimeout(putTimer); putTimer=setTimeout(doPush,300); }
+/* Sends the data to the server, one save at a time. Returns true when saved. */
+async function doPush(){
+  if(!SYNC) return false;
+  if(putBusy){ putAgain=true; return false; }
+  putBusy=true; clearTimeout(retryTimer); let ok=false;
+  try{
+    if(CLOUD){
+      const r=await api('/api/data',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({rev:REV,db})});
+      if(r.ok){ REV=r.data.rev; ok=true; }
+      else if(r.status===409) await onConflict();
+      else if(r.status!==401) throw new Error('save failed');
+    } else {
+      const r=await api('/api/data',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(db)});
+      ok=r.ok; if(!ok) throw new Error('save failed');
+    }
+  }catch(e){
+    toast('Could not save to the server. Check the internet connection; it will retry automatically.',true);
+    retryTimer=setTimeout(doPush,8000);
+  }finally{
+    putBusy=false;
+    if(putAgain){ putAgain=false; setTimeout(doPush,0); }
+  }
+  return ok;
+}
+/* Another device saved first: load its version so nothing is overwritten */
+async function onConflict(){
+  const d=await api('/api/data');
+  if(d.ok){ REV=d.data.rev; db=normalize(d.data.db||blank()); }
+  toast('The data was changed on another device and has been reloaded. Please repeat your last change.',true);
+  route();
+}
+function needLogin(){ if(needLogin.busy) return; needLogin.busy=true; try{ localStorage.removeItem(AUTH_KEY); }catch(e){} SYNC=false; loginView(); }
+/* Loads the online data after signing in */
+async function cloudLoad(){
+  if(!authToken()) return false;
+  const d=await api('/api/data');
+  if(!d.ok) return false;
+  REV=d.data.rev; SYNC=true;
+  db=normalize(d.data.db||blank());
+  if(!d.data.db) await doPush();
+  return true;
+}
+function logout(){ try{ localStorage.removeItem(AUTH_KEY); }catch(e){} location.hash='#/overview'; location.reload(); }
+
+/* Staff sign-in screen (online version) */
+function loginView(){
+  document.body.classList.add('kiosk');
+  document.title='Sign in · Parent Resource Centers';
+  const notReady=API&&API.configured===false;
+  app.innerHTML=`<div class="ck"><div class="ck-card"><img class="ck-logo" src="logo.png" alt="Madera Unified School District · Parent Resource Centers">
+    <h1>Staff sign in<span>Parent Resource Centers</span></h1>
+    ${notReady?`<div class="note" style="text-align:left">${icon('alert',16)}<span>The site has no staff password yet. In Netlify, add the environment variable <b>STAFF_PASSWORD</b> and deploy again.</span></div>`:''}
+    <form id="lg" novalidate>
+      <div class="f"><label for="lgp">Staff password</label><input id="lgp" type="password" autocomplete="current-password" ${notReady?'disabled':''}></div>
+      <div class="err" id="lgerr" role="alert"></div>
+      <button class="btn primary block lg" type="submit" ${notReady?'disabled':''}>${icon('check',18)}Sign in</button>
+    </form>
+    <p class="ck-meta small" style="margin:16px 0 0">Parents don't need to sign in: they only scan the QR code.</p></div></div>`;
+  $('#lgp')?.focus();
+  $('#lg').onsubmit=async e=>{
+    e.preventDefault(); const b=e.target.querySelector('button'); b.disabled=true; $('#lgerr').textContent='';
+    try{
+      const r=await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#lgp').value})});
+      if(r.ok&&r.data?.token){
+        try{ localStorage.setItem(AUTH_KEY,r.data.token); }catch(_){}
+        needLogin.busy=false;
+        if(await cloudLoad()){ startSync(); document.body.classList.remove('kiosk'); route(); return; }
+      }
+      $('#lgerr').textContent=r.status===401?'Wrong password. Try again.':'Could not sign in. Try again in a moment.';
+    }catch(_){ $('#lgerr').textContent='No connection. Check the internet and try again.'; }
+    b.disabled=false;
+  };
+}
+let syncStarted=false;
+// Looks for new QR check-ins: every few seconds while a check-in is open today, once a minute otherwise,
+// and never while the tab is hidden (keeps the online version inside Netlify's free limits)
+function startSync(){
+  if(syncStarted||!SYNC) return; syncStarted=true; pullCheckins();
+  let last=Date.now();
+  setInterval(()=>{
+    if(document.hidden) return;
+    const live=db.sessions.some(s=>s.open&&s.date===today());
+    if(Date.now()-last>=(live?5000:60000)){ last=Date.now(); pullCheckins(); }
+  },1000);
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ last=Date.now(); pullCheckins(); } });
+}
+
+/* ================= Sample data (fictitious) ================= */
+function seed(){
+  db=blank();
+  const t1=insert('terms',{name:'Fall Semester 2026',start_date:'2026-08-07',end_date:'2026-12-23'});
+  insert('terms',{name:'Spring Semester 2027',start_date:'2027-01-12',end_date:'2027-06-04'});
+  const c1=insert('courses',{name:'Loving Solutions',code:'LOVS-1',
+    description:'A community-based parenting skills program: family conflict, school performance, bullying, truancy and media influences. For parents of children ages 5-10.'});
+  const c2=insert('courses',{name:'Computer Literacy',code:'COML-1',
+    description:'Learn essential digital tools to support your children\'s education: parent portals, email, and Google Docs, Sheets and Classroom.'});
+  insert('courses',{name:'Family Night',code:'FAMN-1',description:'Monthly evening activities for the whole family.'});
+  const base={term_id:t1.id,status:'active',capacity:20,location_type:'in_person',location_room:''};
+  const sec1=insert('sections',{...base,course_id:c1.id,component_type:'workshop',name:'Loving Solutions Spanish',start_date:'2026-09-01',end_date:'2026-11-03',language:'Spanish',instructor:'Parent Project',location_name:'Family Resource Center',location_address:'123 Main St, Suite C',meetings:[{day:2,start:'18:00',end:'20:00'}]});
+  insert('sections',{...base,course_id:c1.id,component_type:'workshop',name:'Loving Solutions English',start_date:'2026-08-17',end_date:'2026-10-26',language:'English',instructor:'Parent Project',location_name:'Family Resource Center',location_address:'123 Main St, Suite C',meetings:[{day:1,start:'18:00',end:'20:00'}]});
+  const sec3=insert('sections',{...base,course_id:c2.id,component_type:'lab',name:'Computer Literacy Fall 2026 @FRC',start_date:'2026-10-22',end_date:'2026-12-10',language:'Spanish',instructor:'Ana Torres',location_name:'Family Resource Center',location_address:'',meetings:[{day:4,start:'09:00',end:'11:00'}]});
+  const sec4=insert('sections',{...base,course_id:c2.id,component_type:'workshop',name:'Computer Literacy FRC AM',start_date:'2026-11-19',end_date:'2026-12-10',language:'Spanish',instructor:'Ana Torres',location_name:'FRC',location_address:'',meetings:[{day:5,start:'09:00',end:'11:00'}]});
+  const names=[['Maria','Lopez Hernandez'],['Carlos','Mendoza'],['Lucia','Ramirez Soto'],['Jorge','Castillo'],['Elena','Vargas'],['Pedro','Navarro Ruiz'],['Sofia','Morales'],['Miguel','Herrera'],['Laura','Jimenez'],['Andres','Flores Diaz']];
+  const studs=names.map(([f,l],i)=>insert('students',{first_name:f,last_name:l,birth_date:i%3===0?`198${i}-0${(i%9)+1}-15`:'',email:i%2?`${f.toLowerCase()}@example.com`:'',phone:`555-010${i}`,notes:''}));
+  const enr=(st,sec,status='enrolled')=>insert('enrollments',{student_id:st.id,section_id:sec.id,status,result:'',enrolled_on:'2026-10-21',updated_on:'2026-10-21'});
+  studs.slice(0,6).forEach(s=>enr(s,sec3));
+  studs.slice(6,9).forEach(s=>enr(s,sec4));
+  enr(studs[9],sec1);
+  enr(studs[0],sec1,'waitlisted');
+  // Sample attendance for the Thursday class (sec3)
+  ['2026-10-22','2026-10-29','2026-11-05','2026-11-12'].forEach((date,j)=>studs.slice(0,6).forEach((s,i)=>{
+    const k=(i+j*3)%7; insert('attendance',{section_id:sec3.id,student_id:s.id,date,meeting:0,status:k===0?'absent':k===1?'late':'present',method:'manual',time:date+'T09:05:00'});
+  }));
+  // Loving Solutions (Tuesdays): recorded except the last two classes, so they show up as "to catch up"
+  classDays(sec1,0).slice(0,-2).forEach((date,j)=>insert('attendance',{section_id:sec1.id,student_id:studs[9].id,date,meeting:0,status:j%4===3?'absent':'present',method:'manual',time:date+'T18:05:00'}));
+  [[0,'09:02'],[2,'09:07']].forEach(([i,t])=>insert('attendance',{section_id:sec3.id,student_id:studs[i].id,date:'2026-11-19',meeting:0,status:'present',method:'qr',time:'2026-11-19T'+t+':00'}));
+  save(); return db;
+}
+
+/* ================= Helpers ================= */
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cap=s=>s?String(s).charAt(0).toUpperCase()+String(s).slice(1).replace(/_/g,' '):'';
+const ICONS={
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  users:'<circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M16 4.1a4 4 0 0 1 0 7.8M22 21v-1a6 6 0 0 0-4-5.7"/>',
+  list:'<path d="m3 6 2 2 3-3M3 13l2 2 3-3M11 7h10M11 14h10M3 20h18"/>',
+  layers:'<path d="M12 3 2 8l10 5 10-5z"/><path d="m2 13 10 5 10-5"/>',
+  book:'<path d="M4 19.5V5a2 2 0 0 1 2-2h14v15H6.5A2.5 2.5 0 0 0 4 20.5 2.5 2.5 0 0 0 6.5 23H20"/>',
+  tag:'<path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  userplus:'<circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M19 8v6M16 11h6"/>',
+  pin:'<path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+  db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  alert:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
+  person:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/>',
+  seat:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/>',
+  qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v.01M14 21h.01M17 21h4v-4"/>',
+  chevL:'<path d="m15 18-6-6 6-6"/>', chevR:'<path d="m9 18 6-6-6-6"/>',
+  wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 20h.01"/>',
+  clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 14l2 2 4-4"/>'
+};
+const icon=(n,s=18)=>`<svg class="i" width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const btn=(href,ic,label,cls='primary')=>`<a class="btn ${cls}" href="${href}">${icon(ic,16)}${label}</a>`;
+/* Message at the bottom. Optional action: {label, href} or {label, run} to guide the next step. */
+function toast(msg,err,act){
+  const t=$('#toast');
+  t.innerHTML=icon(err?'alert':'check',18)+`<span>${esc(msg)}</span>`+(act?(act.href?`<a class="tact" href="${act.href}">${esc(act.label)} →</a>`:`<button type="button" class="tact">${esc(act.label)} →</button>`):'');
+  t.className='show'+(err?' err':'')+(act?' act':'');
+  const a=t.querySelector('.tact'); if(a) a.onclick=()=>{ t.className=''; act.run?.(); };
+  clearTimeout(toast.h); toast.h=setTimeout(()=>t.className='',act?7000:3200);
+}
+function ask({title,msg,ok='Delete',danger=true,cancel=true}){
+  const d=$('#dlg'); $('#dlgT').textContent=title; $('#dlgM').textContent=msg;
+  const o=$('#dlgO'); o.textContent=ok; o.className='btn '+(danger?'danger':'primary'); $('#dlgC').hidden=!cancel;
+  d.returnValue=''; d.showModal();
+  return new Promise(res=>d.addEventListener('close',()=>res(d.returnValue==='ok'),{once:true}));
+}
+
+const D=d=>new Date(d+'T00:00:00');
+const fmt=d=>d?D(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+function range(a,b){ if(!a||!b) return `${fmt(a)} – ${fmt(b)}`; return D(a).getFullYear()===D(b).getFullYear()?`${D(a).toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${fmt(b)}`:`${fmt(a)} – ${fmt(b)}`; }
+const weeks=(a,b)=>Math.max(1,Math.round((D(b)-D(a))/6048e5));
+function period(a,b){ const t=today(); return t<a?['Upcoming','info']:t>b?['Past','']:['In progress','ok']; }
+
+const courseCode=c=>c?.code||'';
+/* Course code from the name: "Computer Literacy" → COML-1, "Family Night" → FAMN-1, "Zumba" → ZUMB-1 */
+const STOP=new Set(['OF','AND','THE','FOR','TO','IN','A','AN','DE','LA','EL','Y','PARA','LOS','LAS','DEL','EN']);
+function codePrefix(name){
+  const w=normName(name).toUpperCase().split(' ').filter(x=>x&&!STOP.has(x));
+  if(!w.length) return '';
+  return w.length===1?w[0].slice(0,4):w[0].slice(0,3)+w[1][0];
+}
+function suggestCode(name,exceptId){
+  const p=codePrefix(name); if(!p) return '';
+  let n=1; while(db.courses.some(c=>c.id!==exceptId&&c.code===`${p}-${n}`)) n++;
+  return `${p}-${n}`;
+}
+const studentName=s=>s?`${s.first_name} ${s.last_name}`:'(deleted)';
+const byName=(a,b)=>studentName(a).localeCompare(studentName(b));
+const COUNTS=['enrolled','completed'];
+const ENR_ST=['enrolled','waitlisted','dropped','completed'];
+const RESULT={pass:'Pass',no_pass:'No pass'};
+const resultPill=r=>r==='pass'?'<span class="pill ok">Pass</span>':r==='no_pass'?'<span class="pill bad">No pass</span>':'<span class="muted">Not graded</span>';
+const enrolledCount=id=>db.enrollments.filter(e=>e.section_id===id&&COUNTS.includes(e.status)).length;
+const secName=s=>s?(s.name||get('courses',s.course_id)?.name||'Section '+s.id):'(deleted)';
+function sectionLabel(s){ return `${secName(s)} · ${courseCode(get('courses',s.course_id))} · ${enrolledCount(s.id)}/${s.capacity} seats`; }
+const TONE={active:'ok',enrolled:'ok',completed:'ok',waitlisted:'warn',dropped:'bad',cancelled:'bad'};
+const pill=v=>v?`<span class="pill ${TONE[v]||''}">${esc(cap(v))}</span>`:'';
+function avatar(s){ const h=[160,200,260,20,330,40,280,100][s.id%8]; return `<span class="av" style="background:hsl(${h} 70% 92%);color:hsl(${h} 55% 30%)" aria-hidden="true">${esc(((s.first_name||'')[0]||'')+((s.last_name||'')[0]||'')).toUpperCase()}</span>`; }
+const who=s=>s?`<div class="who">${avatar(s)}<div><b>${esc(studentName(s))}</b><span class="sub">ID #${s.id}</span></div></div>`:'<span class="muted">(deleted)</span>';
+const whoLink=s=>s?`<div class="who">${avatar(s)}<div><a class="lnk" href="#/students/view/${s.id}">${esc(studentName(s))}</a><span class="sub">ID #${s.id}</span></div></div>`:'<span class="muted">(deleted)</span>';
+function meter(n,c){ const p=c?Math.min(100,n/c*100):0; const left=c-n; return `<div class="cap"><div class="l"><b>${n} / ${c}</b><span class="muted">${left>0?left+' left':'Full'}</span></div><div class="bar ${p>=100?'full':p>=80?'warn':''}"><i style="width:${p}%"></i></div></div>`; }
+const dash='<span class="muted">—</span>';
+
+/* ---- Schedules & attendance helpers ---- */
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const t12=t=>{ if(!t) return ''; let [h,m]=t.split(':').map(Number); const ap=h>=12?'PM':'AM'; h=h%12||12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; };
+const meetLabel=m=>`${DAYS[m.day]} - ${t12(m.start)} - ${t12(m.end)}`;
+const meetShort=m=>`${DAYS[m.day].slice(0,3)} ${t12(m.start)}–${t12(m.end)}`;
+const longDate=d=>D(d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+const tShort=t=>t?new Date(t).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'';
+const ATT={present:['Present','P','ok'],late:['Late','L','warn'],absent:['Absent','A','bad'],excused:['Excused','E','info']};
+const attPill=s=>{ const a=ATT[s]; return a?`<span class="pill ${a[2]}">${a[0]}</span>`:''; };
+const roster=secId=>db.enrollments.filter(e=>e.section_id===secId&&COUNTS.includes(e.status)).map(e=>get('students',e.student_id)).filter(Boolean).sort(byName);
+const attFor=(secId,date,mi)=>db.attendance.filter(a=>a.section_id===secId&&a.date===date&&a.meeting===mi);
+function classDays(sec,mi){
+  const ms=sec.meetings||[]; const days=mi>=0&&ms[mi]?[ms[mi].day]:ms.map(m=>m.day); const out=[];
+  if(!days.length||!sec.start_date||!sec.end_date) return out;
+  for(let d=D(sec.start_date);d<=D(sec.end_date);d.setDate(d.getDate()+1)) if(days.includes(d.getDay())) out.push(iso(d));
+  return out;
+}
+/* Past class days (before today) with no attendance recorded, newest first */
+function pendingDays(sec){
+  if(sec.status!=='active'||!roster(sec.id).length) return [];
+  const t=today(), out=[];
+  (sec.meetings||[]).forEach((m,mi)=>classDays(sec,mi).forEach(d=>{
+    if(d<t&&!db.attendance.some(a=>a.section_id===sec.id&&a.date===d&&a.meeting===mi)) out.push({sec,date:d,mi});
+  }));
+  return out.sort((a,b)=>b.date.localeCompare(a.date));
+}
+const allPending=()=>db.sections.flatMap(pendingDays).sort((a,b)=>b.date.localeCompare(a.date));
+/* Classes scheduled for a given day */
+const classesOn=d=>db.sections.filter(s=>s.status==='active').flatMap(s=>(s.meetings||[]).map((m,mi)=>({sec:s,m,mi})).filter(x=>classDays(x.sec,x.mi).includes(d))).sort((a,b)=>a.m.start.localeCompare(b.m.start));
+const attLink=(secId,date,mi,tab)=>`#/attendance/${secId}?date=${date}&mi=${mi}${tab?'&tab='+tab:''}`;
+function attRate(secId,stuId){
+  const recs=db.attendance.filter(a=>a.section_id===secId&&(stuId==null||a.student_id===stuId));
+  if(!recs.length) return null;
+  return Math.round(recs.filter(a=>a.status==='present'||a.status==='late').length/recs.length*100);
+}
+function rateHtml(secId,stuId){ const p=attRate(secId,stuId); if(p==null) return '<span class="muted">No records</span>'; return `<div class="cap"><div class="l"><b>${p}%</b></div><div class="bar ${p<60?'full':p<80?'warn':''}"><i style="width:${p}%"></i></div></div>`; }
+const normName=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z ]/g,' ').split(/\s+/).filter(Boolean).join(' ');
+const normPhone=s=>String(s||'').replace(/\D/g,'').slice(-10);
+function nameMatch(p,nm){ const full=normName(p.first_name+' '+p.last_name), first=normName(p.first_name).split(' ')[0]; return nm===full||nm.split(' ')[0]===first||(nm.length>=3&&full.includes(nm)); }
+const newToken=()=>[...crypto.getRandomValues(new Uint8Array(9))].map(b=>b.toString(16).padStart(2,'0')).join('');
+
+/* ================= Entities ================= */
+const E={
+  students:{one:'Student',many:'Students',icon:'users',view:1,sub:'Parents and guardians registered at the center.',
+    searchPh:'Search by name, phone or email',newSub:'Register a parent or guardian so they can be enrolled in sections.',
+    title:r=>studentName(r),
+    groups:[
+      {title:'Personal information',desc:'Name as it should appear on rosters.',fields:[
+        {k:'first_name',l:'First name',req:1,ph:'e.g. Maria'},
+        {k:'last_name',l:'Last name',req:1,ph:'e.g. Lopez Hernandez'},
+        {k:'birth_date',l:'Birth date',t:'date',help:'Optional'}]},
+      {title:'Contact information',desc:'Enter at least one way to reach this person: phone or email.',fields:[
+        {k:'phone',l:'Phone',t:'tel',ph:'e.g. 559-555-0100'},
+        {k:'email',l:'Email',t:'email',ph:'name@example.com'}]},
+      {title:'Notes',desc:'Optional notes for staff.',fields:[
+        {k:'notes',l:'Notes',t:'textarea',full:1,ph:'Anything staff should know (optional)'}]}],
+    search:r=>[r.first_name,r.last_name,r.phone,r.email,'#'+r.id].join(' '),
+    cols:[
+      {h:'Student',cell:whoLink},
+      {h:'Phone',cls:'nowrap',cell:r=>esc(r.phone)||dash},
+      {h:'Email',cell:r=>esc(r.email)||dash},
+      {h:'Birth date',cls:'nowrap',cell:r=>r.birth_date?fmt(r.birth_date):dash},
+      {h:'Sections',cell:r=>{const n=db.enrollments.filter(e=>e.student_id===r.id&&e.status!=='dropped').length;return n?`<span class="pill info">${n} section${n>1?'s':''}</span>`:'<span class="muted">None yet</span>';}}],
+    validate:r=>{
+      if(!r.email&&!r.phone) return {phone:'Enter a phone or an email.',email:'Enter a phone or an email.'};
+      if(r.email&&!/^\S+@\S+\.\S+$/.test(r.email)) return {email:'This email doesn\'t look right.'};
+    }},
+
+  enrollments:{one:'Enrollment',many:'Enrollments',icon:'list',sub:'Who is enrolled in which section.',
+    searchPh:'Search by student or section',newSub:'Enroll one student in a section. To enroll several at once, use Bulk enrollment.',
+    title:r=>`${studentName(get('students',r.student_id))} · ${secName(get('sections',r.section_id))}`,
+    groups:[
+      {title:'Enrollment',desc:'Choose the student and the section.',fields:[
+        {k:'student_id',l:'Student',t:'select',req:1,full:1,ph:'Select a student',ref:()=>db.students.slice().sort(byName).map(s=>[s.id,`${studentName(s)} (#${s.id})`])},
+        {k:'section_id',l:'Section',t:'select',req:1,full:1,ph:'Select a section',ref:()=>db.sections.map(s=>[s.id,sectionLabel(s)]),help:'Shows seats taken / capacity.'},
+        {k:'status',l:'Status',t:'enum',req:1,opts:ENR_ST,def:'enrolled'}]},
+      {title:'Result',desc:'Fill in when the section ends.',fields:[
+        {k:'result',l:'Final result',t:'enum',ph:'Not graded yet',opts:Object.keys(RESULT),labels:RESULT}]}],
+    search:r=>{const s=get('students',r.student_id),x=get('sections',r.section_id);return [studentName(s),s?.phone,secName(x),courseCode(get('courses',x?.course_id))].join(' ');},
+    filters:[
+      {k:'section_id',l:'All sections',opts:()=>db.sections.map(s=>[s.id,secName(s)]),match:(r,v)=>r.section_id==v},
+      {k:'status',l:'All statuses',opts:()=>ENR_ST.map(s=>[s,cap(s)]),match:(r,v)=>r.status===v}],
+    cols:[
+      {h:'Student',cell:r=>whoLink(get('students',r.student_id))},
+      {h:'Section',cell:r=>{const x=get('sections',r.section_id);const c=get('courses',x?.course_id);return x?`<a class="lnk" href="#/sections/view/${x.id}">${esc(secName(x))}</a><span class="sub"><span class="code">${esc(courseCode(c))}</span> · ${esc(cap(x.component_type))}</span>`:dash;}},
+      {h:'Dates',cls:'nowrap',cell:r=>{const x=get('sections',r.section_id);return x?range(x.start_date,x.end_date):dash;}},
+      {h:'Status',cell:r=>pill(r.status)},
+      {h:'Result',cell:r=>resultPill(r.result)},
+      {h:'Enrolled on',cls:'nowrap',cell:r=>`${fmt(r.enrolled_on)}<span class="sub">Updated ${fmt(r.updated_on)}</span>`}],
+    validate:(r,id)=>{
+      if(db.enrollments.some(e=>e.id!==id&&e.student_id===r.student_id&&e.section_id===r.section_id&&e.status!=='dropped'))
+        return {student_id:'This student is already in that section.'};
+      const sec=get('sections',r.section_id);
+      if(sec&&COUNTS.includes(r.status)){
+        const prev=id?get('enrollments',id):null;
+        const already=prev&&prev.section_id===r.section_id&&COUNTS.includes(prev.status);
+        if(!already&&enrolledCount(sec.id)>=sec.capacity) return {status:`The section is full (${sec.capacity} seats). Choose "Waitlisted".`};
+      }
+    },
+    beforeSave:(r,id)=>{ r.updated_on=today(); if(!id) r.enrolled_on=today(); }},
+
+  sections:{one:'Section',many:'Sections',icon:'layers',view:1,sub:'Scheduled offerings of a course during a term.',
+    searchPh:'Search by name, course, instructor or location',newSub:'Schedule a course for a term. Students enroll into sections.',
+    title:r=>secName(r),
+    groups:[
+      {title:'Course & term',desc:'What is being taught and when.',fields:[
+        {k:'course_id',l:'Course',t:'select',req:1,ph:'Select a course',ref:()=>db.courses.map(c=>[c.id,`${c.name} (${courseCode(c)})`])},
+        {k:'term_id',l:'Term',t:'select',req:1,ph:'Select a term',ref:()=>db.terms.map(t=>[t.id,t.name])},
+        {k:'component_type',l:'Format',t:'enum',req:1,opts:['workshop','class','lab','lecture','seminar','tutoring'],def:'workshop'},
+        {k:'status',l:'Status',t:'enum',req:1,opts:['active','inactive','cancelled'],def:'active'},
+        {k:'name',l:'Section name',full:1,ph:'Created from the course and language',help:'Automatic (course + language). You can change it, e.g. "Computer Literacy – Spanish AM".',
+          auto:{from:['course_id','language'],fn:r=>{const c=get('courses',r.course_id);return c?c.name+(r.language?' – '+r.language:''):'';}}}]},
+      {title:'Schedule & capacity',desc:'Dates must fall inside the selected term.',fields:[
+        {k:'start_date',l:'Start date',t:'date',req:1},
+        {k:'end_date',l:'End date',t:'date',req:1},
+        {k:'capacity',l:'Total capacity',t:'number',req:1,ph:'e.g. 20',def:20,help:'Maximum number of enrolled students.'},
+        {k:'language',l:'Language',t:'enum',ph:'Select a language',opts:['English','Spanish','Bilingual','Other']},
+        {k:'meetings',l:'Meeting times',t:'meetings',full:1,def:[],help:'Days and times the class meets. Used to take attendance.'}]},
+      {title:'Instructor & location',desc:'Who teaches and where the class meets.',fields:[
+        {k:'instructor',l:'Instructor',ph:'Instructor name'},
+        {k:'location_type',l:'Location type',t:'radio',opts:[['in_person','In-person'],['online','Online']],def:'in_person'},
+        {k:'location_name',l:'Location name',ph:'e.g. Family Resource Center'},
+        {k:'location_room',l:'Room number',ph:'e.g. 12B',showIf:r=>r.location_type!=='online'},
+        {k:'location_address',l:'Address',full:1,ph:'Street, city, state, ZIP',showIf:r=>r.location_type!=='online'}]}],
+    search:r=>[secName(r),courseCode(get('courses',r.course_id)),get('courses',r.course_id)?.name,r.instructor,r.location_name,r.language].join(' '),
+    filters:[
+      {k:'course_id',l:'All courses',opts:()=>db.courses.map(c=>[c.id,c.name]),match:(r,v)=>r.course_id==v},
+      {k:'term_id',l:'All terms',opts:()=>db.terms.map(t=>[t.id,t.name]),match:(r,v)=>r.term_id==v},
+      {k:'status',l:'All statuses',opts:()=>['active','inactive','cancelled'].map(s=>[s,cap(s)]),match:(r,v)=>r.status===v},
+      {k:'language',l:'All languages',opts:()=>['English','Spanish','Bilingual','Other'].map(s=>[s,s]),match:(r,v)=>r.language===v}],
+    cols:[
+      {h:'Section',cell:r=>`<a class="lnk" href="#/sections/view/${r.id}">${esc(secName(r))}</a><span class="sub"><span class="code">${esc(courseCode(get('courses',r.course_id)))}</span> · ${esc(cap(r.component_type))}</span>`},
+      {h:'Term',cell:r=>esc(get('terms',r.term_id)?.name)||dash},
+      {h:'Dates',cls:'nowrap',cell:r=>`${range(r.start_date,r.end_date)}<span class="sub">${(r.meetings||[]).length?r.meetings.map(meetShort).join('<br>'):weeks(r.start_date,r.end_date)+' weeks'}</span>`},
+      {h:'Instructor',cell:r=>`${esc(r.instructor)||dash}${r.language?`<span class="sub"><span class="tag">${esc(r.language)}</span></span>`:''}`},
+      {h:'Location',cell:r=>`${esc(r.location_name)||dash}<span class="sub">${r.location_type==='online'?'Online':esc([r.location_address,r.location_room&&'Room '+r.location_room].filter(Boolean).join(' · ')||'In-person')}</span>`},
+      {h:'Enrollment',cell:r=>meter(enrolledCount(r.id),r.capacity)},
+      {h:'Status',cell:r=>pill(r.status)}],
+    validate:r=>{
+      const e={};
+      if(r.end_date<r.start_date) e.end_date='End date must be on or after the start date.';
+      const t=get('terms',r.term_id);
+      if(t&&r.start_date&&r.start_date<t.start_date) e.start_date=`The term starts on ${fmt(t.start_date)}.`;
+      if(t&&r.end_date&&r.end_date>t.end_date) e.end_date=`The term ends on ${fmt(t.end_date)}.`;
+      if(!(r.capacity>0)) e.capacity='Capacity must be at least 1.';
+      if((r.meetings||[]).some(m=>m.end<=m.start)) e.meetings='Each end time must be after its start time.';
+      else if((r.meetings||[]).length&&r.start_date&&r.end_date&&!e.end_date&&!classDays(r,-1).length) e.meetings='None of these days fall between the start and end dates.';
+      return e;
+    },
+    beforeSave:r=>{ if(!r.name){ const c=get('courses',r.course_id); r.name=c?c.name+(r.language?' – '+r.language:''):''; } }},
+
+  courses:{one:'Course',many:'Courses',icon:'book',sub:'Programs offered to families. Schedule them for a term through sections.',
+    searchPh:'Search by name, code or description',newSub:'Type the name and the course code is created for you.',
+    title:r=>r.name,
+    groups:[
+      {title:'Course details',desc:'The code is created automatically from the name (e.g. Computer Literacy → COML-1).',fields:[
+        {k:'name',l:'Name',req:1,ph:'e.g. Computer Literacy'},
+        {k:'code',l:'Course code',req:1,upper:1,max:12,ph:'Created from the name',help:'Automatic. You can change it if you prefer.',auto:{from:'name',fn:(r,id)=>suggestCode(r.name,id)}},
+        {k:'description',l:'Description',t:'textarea',full:1,ph:'What will participants learn? Who is it for?'}]}],
+    search:r=>[r.name,r.code,r.description].join(' '),
+    cols:[
+      {h:'Code',cls:'nowrap',cell:r=>`<span class="code">${esc(r.code)}</span>`},
+      {h:'Course',cell:r=>`<b>${esc(r.name)}</b>`},
+      {h:'Description',cell:r=>r.description?`<span class="clamp" title="${esc(r.description)}">${esc(r.description)}</span>`:dash},
+      {h:'Sections',cell:r=>{const n=db.sections.filter(s=>s.course_id===r.id).length;return n?`<a class="lnk" href="#/sections" data-course="${r.id}">${n}</a>`:'<span class="muted">0</span>';}}],
+    validate:(r,id)=>{
+      if(!/^[A-Z0-9]+(-[A-Z0-9]+)*$/.test(r.code)) return {code:'Use only letters, numbers and dashes (e.g. COML-1).'};
+      if(db.courses.some(c=>c.id!==id&&c.code===r.code)) return {code:`${r.code} is already used. Try ${suggestCode(r.name,id)}.`};
+    }},
+
+  terms:{one:'Term',many:'Terms',icon:'calendar',sub:'Semesters or periods in which sections are offered.',
+    searchPh:'Search terms',newSub:'For example: Fall Semester 2026.',
+    title:r=>r.name,
+    groups:[
+      {title:'Term details',desc:'Sections must be scheduled inside these dates.',fields:[
+        {k:'name',l:'Name',req:1,full:1,ph:'e.g. Fall Semester 2026'},
+        {k:'start_date',l:'Start date',t:'date',req:1},
+        {k:'end_date',l:'End date',t:'date',req:1}]}],
+    search:r=>r.name,
+    cols:[
+      {h:'Term',cell:r=>{const [p,t]=period(r.start_date,r.end_date);return `<b>${esc(r.name)}</b> <span class="pill ${t}">${p}</span>`;}},
+      {h:'Dates',cls:'nowrap',cell:r=>range(r.start_date,r.end_date)},
+      {h:'Length',cls:'nowrap',cell:r=>weeks(r.start_date,r.end_date)+' weeks'},
+      {h:'Sections',cell:r=>db.sections.filter(s=>s.term_id===r.id).length}],
+    validate:r=>r.end_date<r.start_date?{end_date:'End date must be on or after the start date.'}:null}
+};
+const DEPS={terms:[['sections','term_id']],courses:[['sections','course_id']],
+  sections:[['enrollments','section_id'],['attendance','section_id']],students:[['enrollments','student_id'],['attendance','student_id']]};
+const TABS=[['Daily work'],['overview','Home','home'],['attendance','Attendance','clip'],['students','Students','users'],['enrollments','Enrollments','list'],
+  ['Program setup'],['sections','Sections','layers'],['courses','Courses','book'],['terms','Terms','calendar']];
+
+/* ================= Shared views ================= */
+const app=$('#app');
+function pageHead({crumbs=[],title,sub='',actions=''}){
+  const cr=[['#/overview','Home'],...crumbs];
+  return `<div class="ph"><div><nav class="crumbs" aria-label="Breadcrumb">${cr.map(([h,l],i)=>i<cr.length-1?`<a href="${h}">${esc(l)}</a> / `:`<span aria-current="page">${esc(l)}</span>`).join('')}</nav>
+    <h1>${esc(title)}</h1>${sub?`<p>${sub}</p>`:''}</div>${actions?`<div class="acts">${actions}</div>`:''}</div>`;
+}
+function table(cols,rows,actFn){
+  return `<div class="tw"><table class="rsp"><thead><tr>${cols.map(c=>`<th>${c.h}</th>`).join('')}${actFn?'<th><span class="sr">Actions</span></th>':''}</tr></thead><tbody>
+    ${rows.map(r=>`<tr>${cols.map((c,i)=>`<td data-label="${c.h}" class="${c.cls||''} ${i===0?'first':''}"><div class="cv">${c.cell(r)}</div></td>`).join('')}${actFn?`<td class="act">${actFn(r)}</td>`:''}</tr>`).join('')}</tbody></table></div>`;
+}
+function emptyState(ic,title,text,action){ return `<div class="empty"><div class="ic">${icon(ic,24)}</div><h4>${title}</h4><p>${text}</p>${action||''}</div>`; }
+function rowActions(t,r){
+  return `${E[t].view?`<a class="ibtn" href="#/${t}/view/${r.id}" title="View" aria-label="View">${icon('eye')}</a>`:''}<a class="ibtn" href="#/${t}/edit/${r.id}" title="Edit" aria-label="Edit">${icon('edit')}</a><button class="ibtn del" data-del="${r.id}" title="Delete" aria-label="Delete">${icon('trash')}</button>`;
+}
+async function del(t,id,after){
+  for(const [dt,fk] of DEPS[t]||[]){
+    const n=db[dt].filter(r=>r[fk]===id).length;
+    if(n){ const what=E[dt]?(n>1?E[dt].many:E[dt].one).toLowerCase():'attendance records';
+      await ask({title:`Can't delete this ${E[t].one.toLowerCase()}`,msg:`It is used by ${n} ${what}. Delete or move those first.`,ok:'Got it',danger:false,cancel:false}); return; }
+  }
+  const r=get(t,id);
+  const name=t==='enrollments'?E.enrollments.title(r):E[t].title(r);
+  if(!await ask({title:t==='enrollments'?'Remove enrollment?':`Delete ${E[t].one.toLowerCase()}?`,msg:`"${name}" will be permanently removed.`,ok:t==='enrollments'?'Remove':'Delete'})) return;
+  db[t]=db[t].filter(x=>x.id!==id); save(); toast(`${E[t].one} deleted`); after?after():route();
+}
+
+/* ================= List ================= */
+const UI={q:{},f:{}};
+function listView(t){
+  const d=E[t]; UI.q[t]=UI.q[t]||''; UI.f[t]=UI.f[t]||{};
+  const filters=(d.filters||[]).map(f=>`<select data-f="${f.k}" aria-label="${f.l}"><option value="">${f.l}</option>${f.opts().map(([v,l])=>`<option value="${v}" ${String(UI.f[t][f.k]??'')===String(v)?'selected':''}>${esc(l)}</option>`).join('')}</select>`).join('');
+  const acts=(t==='enrollments'?btn('#/enrollments/bulk','userplus','Bulk enrollment','secondary'):'')+btn(`#/${t}/new`,'plus',`New ${d.one.toLowerCase()}`);
+  app.innerHTML=pageHead({crumbs:[['',d.many]],title:d.many,sub:d.sub,actions:acts})+
+    (db[t].length?`<div class="toolbar"><div class="search">${icon('search',16)}<input id="q" type="search" placeholder="${d.searchPh}" value="${esc(UI.q[t])}" aria-label="Search"></div>${filters}<span class="count" id="cnt"></span></div>`:'')+
+    `<div class="card" id="tbl"></div>`;
+  const draw=()=>{
+    if(!db[t].length){ $('#tbl').innerHTML=emptyState(d.icon,`No ${d.many.toLowerCase()} yet`,d.newSub,btn(`#/${t}/new`,'plus',`New ${d.one.toLowerCase()}`)); return; }
+    const q=UI.q[t].toLowerCase().trim();
+    const rows=db[t].filter(r=>(!q||d.search(r).toLowerCase().includes(q))&&(d.filters||[]).every(f=>{const v=UI.f[t][f.k];return !v||f.match(r,v);}));
+    $('#cnt').textContent=rows.length===db[t].length?`${rows.length} ${rows.length===1?d.one.toLowerCase():d.many.toLowerCase()}`:`${rows.length} of ${db[t].length}`;
+    $('#tbl').innerHTML=rows.length?table(d.cols,rows,r=>rowActions(t,r)):emptyState('search','No results','Try a different search or clear the filters.','<button class="btn secondary" id="clr">Clear filters</button>');
+    app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>del(t,Number(b.dataset.del)));
+    app.querySelectorAll('[data-course]').forEach(a=>a.onclick=()=>{ UI.q.sections=''; UI.f.sections={course_id:a.dataset.course}; });
+    const clr=$('#clr'); if(clr) clr.onclick=()=>{UI.q[t]='';UI.f[t]={};listView(t);};
+  };
+  const qi=$('#q'); if(qi) qi.oninput=e=>{UI.q[t]=e.target.value;draw();};
+  app.querySelectorAll('[data-f]').forEach(s=>s.onchange=()=>{UI.f[t][s.dataset.f]=s.value;draw();});
+  draw();
+}
+
+/* ================= Form ================= */
+function fieldHtml(f,rec){
+  const val=rec?.[f.k]??f.def??'';
+  const id='f_'+f.k;
+  const star=f.req?' <span class="reqdot" aria-hidden="true">*</span>':'';
+  let inp;
+  switch(f.t){
+    case 'textarea': inp=`<textarea id="${id}" name="${f.k}" placeholder="${esc(f.ph||'')}">${esc(val)}</textarea>`; break;
+    case 'select': inp=`<select id="${id}" name="${f.k}"><option value="">${esc(f.ph)}</option>${f.ref().map(([v,l])=>`<option value="${v}" ${String(val)===String(v)?'selected':''}>${esc(l)}</option>`).join('')}</select>`; break;
+    case 'enum': inp=`<select id="${id}" name="${f.k}">${f.ph?`<option value="">${esc(f.ph)}</option>`:''}${f.opts.map(o=>`<option value="${o}" ${String(val)===o?'selected':''}>${esc(f.labels?.[o]||cap(o))}</option>`).join('')}</select>`; break;
+    case 'meetings': return `<div class="f full" data-k="${f.k}" data-meet><span class="lb">${esc(f.l)}</span><div class="mt-list">${(Array.isArray(val)?val:[]).map(meetRow).join('')}</div>
+      <button type="button" class="btn secondary sm" data-addmt>${icon('plus',14)}Add meeting time</button>${f.help?`<small class="help">${esc(f.help)}</small>`:''}<small class="err" role="alert"></small></div>`;
+    case 'radio': return `<div class="f" data-k="${f.k}"><span class="lb" id="${id}">${esc(f.l)}${star}</span><div class="seg" role="radiogroup" aria-labelledby="${id}">${f.opts.map(([o,l])=>`<label><input type="radio" name="${f.k}" value="${o}" ${val===o?'checked':''}><span>${esc(l)}</span></label>`).join('')}</div><small class="err"></small></div>`;
+    default: inp=`<input id="${id}" name="${f.k}" type="${f.t||'text'}" ${f.t==='number'?'min="0" step="any" inputmode="numeric"':''} ${f.max?`maxlength="${f.max}"`:''} placeholder="${esc(f.ph||'')}" value="${esc(val)}" ${f.upper?'style="text-transform:uppercase"':''}>`;
+  }
+  return `<div class="f ${f.full?'full':''}" data-k="${f.k}"><label for="${id}">${esc(f.l)}${star}</label>${inp}${f.help?`<small class="help">${esc(f.help)}</small>`:''}<small class="err" role="alert"></small></div>`;
+}
+
+function meetRow(m){
+  return `<div class="mt-row"><select name="m_day" aria-label="Day">${DAYS.map((d,i)=>`<option value="${i}" ${m.day===i?'selected':''}>${d}</option>`).join('')}</select>
+    <input type="time" name="m_start" value="${esc(m.start)}" aria-label="Start time"><span class="muted">to</span><input type="time" name="m_end" value="${esc(m.end)}" aria-label="End time">
+    <button type="button" class="ibtn del" data-rmmt title="Remove" aria-label="Remove meeting time">${icon('trash')}</button></div>`;
+}
+function formView(t,id,preset){
+  const d=E[t]; const rec=id?get(t,id):(preset||{});
+  if(id&&!rec){ location.hash='#/'+t; return; }
+  const back=backFrom(t,id,preset);
+  app.innerHTML=pageHead({crumbs:[['#/'+t,d.many],['',id?'Edit':'New']],title:id?`Edit ${d.one.toLowerCase()}`:`New ${d.one.toLowerCase()}`,sub:esc(id?d.title(rec):d.newSub)})+
+    `<form id="frm" novalidate>${d.groups.map(g=>`<section class="panel"><header><h3>${g.title}</h3>${g.desc?`<p>${g.desc}</p>`:''}</header><div class="grid">${g.fields.map(f=>fieldHtml(f,rec)).join('')}</div></section>`).join('')}
+    <div class="formbar"><span class="muted"><span class="reqdot">*</span> Required field</span><div class="btns"><a class="btn secondary" href="${back}">Cancel</a><button class="btn primary" type="submit">${icon('check',16)}${id?'Save changes':'Create '+d.one.toLowerCase()}</button></div></div></form>`;
+  const frm=$('#frm');
+  const fields=d.groups.flatMap(g=>g.fields);
+  const read=()=>{ const fd=new FormData(frm), r={};
+    for(const f of fields){
+      if(f.t==='meetings'){ const ds=fd.getAll('m_day'),ss=fd.getAll('m_start'),es=fd.getAll('m_end');
+        r[f.k]=ds.map((d,i)=>({day:Number(d),start:ss[i],end:es[i]})).filter(m=>m.start&&m.end); continue; }
+      let v=(fd.get(f.k)??'').toString().trim();
+      if(f.upper) v=v.toUpperCase();
+      if((f.t==='select'||f.t==='number')&&v!=='') v=Number(v);
+      r[f.k]=v; }
+    return r; };
+  const vis=()=>{ const r=read(); fields.forEach(f=>{ if(f.showIf) frm.querySelector(`[data-k="${f.k}"]`).hidden=!f.showIf(r); }); };
+  // Fields that fill themselves in (course code, section name) until the user types their own value
+  fields.filter(f=>f.auto).forEach(f=>{
+    const inp=frm.querySelector(`[name="${f.k}"]`);
+    let touched=!!(id&&rec[f.k]);
+    inp.addEventListener('input',()=>{ touched=inp.value.trim()!==''; });
+    const upd=()=>{ if(!touched) inp.value=f.auto.fn(read(),id||null); };
+    [].concat(f.auto.from).forEach(k=>frm.querySelectorAll(`[name="${k}"]`).forEach(el=>{ el.addEventListener('input',upd); el.addEventListener('change',upd); }));
+    upd();
+  });
+  const clearErr=box=>{ box.classList.remove('invalid'); box.querySelector('.err').textContent=''; };
+  frm.addEventListener('change',vis); vis();
+  frm.querySelectorAll('[data-meet]').forEach(box=>{
+    box.querySelector('[data-addmt]').onclick=()=>{ const last=box.querySelectorAll('.mt-row'); const prev=last.length?{day:Number(last[last.length-1].querySelector('select').value),start:'09:00',end:'11:00'}:{day:1,start:'09:00',end:'11:00'}; box.querySelector('.mt-list').insertAdjacentHTML('beforeend',meetRow(prev)); };
+    box.addEventListener('click',e=>{ const b=e.target.closest('[data-rmmt]'); if(b) b.closest('.mt-row').remove(); });
+  });
+  frm.addEventListener('input',e=>{ const box=e.target.closest('.f'); if(box) clearErr(box); });
+  frm.querySelector('input:not([type=radio]),select,textarea')?.focus();
+  frm.onsubmit=e=>{
+    e.preventDefault();
+    const r=read(); let errs={};
+    for(const f of fields){
+      if(f.showIf&&!f.showIf(r)){ r[f.k]=''; continue; }
+      if(f.req&&r[f.k]==='') errs[f.k]='This field is required.';
+    }
+    if(!Object.keys(errs).length&&d.validate) errs=d.validate(r,id||null)||{};
+    frm.querySelectorAll('.f').forEach(clearErr);
+    const keys=Object.keys(errs);
+    if(keys.length){
+      keys.forEach(k=>{ const box=frm.querySelector(`[data-k="${k}"]`); if(box){ box.classList.add('invalid'); box.querySelector('.err').textContent=errs[k]; } });
+      const first=frm.querySelector('.f.invalid'); first?.scrollIntoView({behavior:'smooth',block:'center'}); first?.querySelector('input,select,textarea')?.focus({preventScroll:true});
+      toast(keys.length===1?errs[keys[0]]:`Please review ${keys.length} fields.`,true); return;
+    }
+    d.beforeSave?.(r,id);
+    if(id){ Object.assign(get(t,id),r); r.id=id; } else insert(t,r);
+    save();
+    const nx=afterSave(t,r,!id,preset);
+    location.hash=nx.hash;
+    toast(`${d.one} ${id?'saved':'created'}`,false,nx.act);
+  };
+}
+/* Where to go after saving a form, and which next step to suggest */
+function backFrom(t,id,preset){
+  if(preset?.student_id) return '#/students/view/'+preset.student_id;
+  if(t==='enrollments'&&preset?.section_id) return '#/sections/view/'+preset.section_id;
+  if(id&&(t==='sections'||t==='students')) return `#/${t}/view/${id}`;
+  return '#/'+t;
+}
+function afterSave(t,r,isNew,preset){
+  if(!isNew||t==='enrollments') return {hash:backFrom(t,isNew?null:r.id,preset)};
+  switch(t){
+    case 'terms': return {hash:'#/terms',act:{label:'Schedule a section',href:`#/sections/new?term_id=${r.id}`}};
+    case 'courses': return {hash:'#/courses',act:{label:'Schedule a section',href:`#/sections/new?course_id=${r.id}`}};
+    case 'sections': return {hash:'#/sections/view/'+r.id,act:{label:'Add students',href:`#/enrollments/bulk?section=${r.id}`}};
+    case 'students': return {hash:'#/students/view/'+r.id,act:{label:'Enroll in a section',href:`#/enrollments/new?student_id=${r.id}`}};
+  }
+  return {hash:'#/'+t};
+}
+
+/* ================= Section detail ================= */
+function sectionView(id){
+  const s=get('sections',id); if(!s){ location.hash='#/sections'; return; }
+  const c=get('courses',s.course_id), term=get('terms',s.term_id), n=enrolledCount(s.id);
+  const rosterE=db.enrollments.filter(e=>e.section_id===s.id).sort((a,b)=>byName(get('students',a.student_id)||{},get('students',b.student_id)||{}));
+  const wait=rosterE.filter(e=>e.status==='waitlisted').length;
+  app.innerHTML=pageHead({crumbs:[['#/sections','Sections'],['',secName(s)]],title:secName(s),
+      sub:`<span class="code">${esc(courseCode(c))}</span> ${esc(c?.name)} · ${esc(cap(s.component_type))} · ${pill(s.status)}`,
+      actions:btn(`#/sections/edit/${s.id}`,'edit','Edit','secondary')+btn(`#/enrollments/bulk?section=${s.id}`,'userplus','Add students','secondary')+btn(`#/attendance/${s.id}`,'clip','Take attendance')})+`
+    <div class="infog">
+      <div><div class="k">${icon('seat',14)} Enrollment</div>${meter(n,s.capacity)}${wait?`<span class="sub">${wait} on waitlist</span>`:''}</div>
+      <div><div class="k">${icon('calendar',14)} Dates</div><div class="v">${range(s.start_date,s.end_date)}</div><span class="sub">${esc(term?.name)} · ${weeks(s.start_date,s.end_date)} weeks</span>${(s.meetings||[]).length?`<span class="sub">${s.meetings.map(meetShort).join('<br>')}</span>`:''}</div>
+      <div><div class="k">${icon('person',14)} Instructor</div><div class="v">${esc(s.instructor)||dash}</div>${s.language?`<span class="sub"><span class="tag">${esc(s.language)}</span></span>`:''}</div>
+      <div><div class="k">${icon('pin',14)} Location</div><div class="v">${s.location_type==='online'?'Online':esc(s.location_name)||'In-person'}</div><span class="sub">${s.location_type==='online'?esc(s.location_name):esc([s.location_address,s.location_room&&'Room '+s.location_room].filter(Boolean).join(' · '))}</span></div>
+    </div>
+    <div class="card"><div class="hd"><h3>Roster (${rosterE.length})</h3></div>
+    ${rosterE.length?table([
+        {h:'Student',cell:e=>whoLink(get('students',e.student_id))},
+        {h:'Contact',cell:e=>{const p=get('students',e.student_id);return `${esc(p?.phone)||dash}${p?.email?`<span class="sub">${esc(p.email)}</span>`:''}`;}},
+        {h:'Status',cell:e=>`<select data-st="${e.id}" aria-label="Status">${ENR_ST.map(o=>`<option value="${o}" ${o===e.status?'selected':''}>${cap(o)}</option>`).join('')}</select>`},
+        {h:'Attendance',cell:e=>rateHtml(s.id,e.student_id)},
+        {h:'Result',cell:e=>resultPill(e.result)}],rosterE,
+        e=>`<a class="ibtn" href="#/enrollments/edit/${e.id}" title="Edit grades" aria-label="Edit enrollment">${icon('edit')}</a><button class="ibtn del" data-del="${e.id}" title="Remove from section" aria-label="Remove from section">${icon('trash')}</button>`)
+      :emptyState('users','No students yet','Add students to this section to start the roster.',btn(`#/enrollments/bulk?section=${s.id}`,'userplus','Add students'))}</div>`;
+  app.querySelectorAll('[data-st]').forEach(sel=>sel.onchange=()=>{
+    const e=get('enrollments',sel.dataset.st);
+    const err=E.enrollments.validate({...e,status:sel.value},e.id);
+    if(err&&Object.keys(err).length){ toast(Object.values(err)[0],true); sel.value=e.status; return; }
+    e.status=sel.value; e.updated_on=today(); save(); toast('Status updated'); sectionView(id);
+  });
+  app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>del('enrollments',Number(b.dataset.del),()=>sectionView(id)));
+}
+
+/* ================= Student profile ================= */
+function studentView(id){
+  const p=get('students',id); if(!p){ location.hash='#/students'; return; }
+  const enr=db.enrollments.filter(e=>e.student_id===p.id);
+  const att=db.attendance.filter(a=>a.student_id===p.id);
+  const rate=att.length?Math.round(att.filter(a=>a.status==='present'||a.status==='late').length/att.length*100):null;
+  const recent=[...att].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
+  app.innerHTML=pageHead({crumbs:[['#/students','Students'],['',studentName(p)]],title:studentName(p),sub:`Student ID #${p.id}`,
+      actions:btn(`#/students/edit/${p.id}`,'edit','Edit','secondary')+btn(`#/enrollments/new?student_id=${p.id}`,'plus','Enroll in a section')})+`
+    <div class="infog">
+      <div><div class="k">${icon('person',14)} Contact</div><div class="v">${esc(p.phone)||dash}</div><span class="sub">${esc(p.email)||'No email'}</span></div>
+      <div><div class="k">${icon('calendar',14)} Birth date</div><div class="v">${p.birth_date?fmt(p.birth_date):dash}</div></div>
+      <div><div class="k">${icon('layers',14)} Sections</div><div class="v">${enr.filter(e=>e.status!=='dropped').length} active</div><span class="sub">${enr.length} total</span></div>
+      <div><div class="k">${icon('clip',14)} Attendance</div><div class="v">${rate==null?'No records yet':rate+'%'}</div><span class="sub">${att.length} class${att.length===1?'':'es'} recorded</span></div>
+    </div>
+    ${p.notes?`<div class="note info" style="margin-top:0">${icon('alert',16)}<span>${esc(p.notes)}</span></div>`:''}
+    <div class="cols">
+      <div class="card"><div class="hd"><h3>Enrollments (${enr.length})</h3></div>
+      ${enr.length?table([
+          {h:'Section',cell:e=>{const x=get('sections',e.section_id);return x?`<a class="lnk" href="#/sections/view/${x.id}">${esc(secName(x))}</a><span class="sub"><span class="code">${esc(courseCode(get('courses',x.course_id)))}</span> · ${esc(get('terms',x.term_id)?.name)}</span>`:dash;}},
+          {h:'Dates',cls:'nowrap',cell:e=>{const x=get('sections',e.section_id);return x?range(x.start_date,x.end_date):dash;}},
+          {h:'Status',cell:e=>pill(e.status)},
+          {h:'Attendance',cell:e=>rateHtml(e.section_id,p.id)},
+          {h:'Result',cell:e=>resultPill(e.result)}],enr,
+          e=>`<a class="ibtn" href="#/enrollments/edit/${e.id}" title="Edit" aria-label="Edit enrollment">${icon('edit')}</a><button class="ibtn del" data-del="${e.id}" title="Remove" aria-label="Remove enrollment">${icon('trash')}</button>`)
+        :emptyState('layers','Not enrolled yet','Enroll this student in a section to start tracking attendance.',btn(`#/enrollments/new?student_id=${p.id}`,'plus','Enroll in a section'))}</div>
+      <div class="card"><div class="hd"><h3>Recent attendance</h3></div>
+        ${recent.length?`<ul class="today">${recent.map(a=>`<li><div class="tt"><b>${D(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b><span class="sub">${DAYS[D(a.date).getDay()].slice(0,3)}</span></div>
+          <div class="grow"><a class="lnk" href="${attLink(a.section_id,a.date,a.meeting)}">${esc(secName(get('sections',a.section_id)))}</a>${a.method==='qr'?`<span class="sub">${icon('qr',12)} QR ${tShort(a.time)}</span>`:''}</div>${attPill(a.status)}</li>`).join('')}</ul>`
+          :'<div class="empty" style="padding:28px">No attendance recorded yet.</div>'}</div>
+    </div>`;
+  app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>del('enrollments',Number(b.dataset.del),()=>studentView(id)));
+}
+
+/* ================= Bulk enrollment ================= */
+function bulkView(q){
+  let secId=Number(q.get('section'))||0, status='enrolled', query='';
+  const sel=new Set();
+  const opts=db.terms.map(t=>{ const ss=db.sections.filter(s=>s.term_id===t.id&&s.status==='active'); return ss.length?`<optgroup label="${esc(t.name)}">${ss.map(s=>`<option value="${s.id}" ${s.id===secId?'selected':''}>${esc(sectionLabel(s))}</option>`).join('')}</optgroup>`:''; }).join('');
+  app.innerHTML=pageHead({crumbs:[['#/enrollments','Enrollments'],['','Bulk enrollment']],title:'Bulk enrollment',sub:'Enroll several students into one section at once.'})+`
+    <div class="bulk"><div class="stack">
+      <section class="card pad"><h3 class="step"><span>1</span>Choose a section</h3>
+        ${opts?`<select id="bsec" aria-label="Section"><option value="">Select a section…</option>${opts}</select>`:`<p class="muted">There are no active sections. <a href="#/sections/new">Create a section</a> first.</p>`}</section>
+      <section class="card"><div class="hd"><h3 class="step"><span>2</span>Select students</h3><button class="btn secondary sm" id="ball" type="button">Select all shown</button></div>
+        <div class="padx"><div class="search" style="max-width:none">${icon('search',16)}<input id="bq" type="search" placeholder="Search by name, phone or email" aria-label="Search students"></div></div>
+        <div class="pick" id="blist"></div></section>
+    </div>
+    <aside class="card pad summary" id="bsum" aria-live="polite"></aside></div>`;
+  const inSec=id=>secId&&db.enrollments.some(e=>e.student_id===id&&e.section_id===secId&&e.status!=='dropped');
+  const shown=()=>{ const v=query.toLowerCase().trim(); return db.students.slice().sort(byName).filter(s=>!v||E.students.search(s).toLowerCase().includes(v)); };
+  const drawList=()=>{
+    const list=shown();
+    $('#blist').innerHTML=list.length?list.map(s=>{ const dis=inSec(s.id), on=sel.has(s.id);
+      return `<label class="${dis?'dis':''} ${on?'on':''}"><input type="checkbox" value="${s.id}" ${on?'checked':''} ${dis?'disabled':''}>${avatar(s)}<span class="grow"><b>${esc(studentName(s))}</b><span class="sub">${esc([s.phone,s.email].filter(Boolean).join(' · '))}</span></span>${dis?'<span class="pill ok">Already in section</span>':''}</label>`; }).join('')
+      :emptyState('search','No students found',db.students.length?'Try another search.':'Register students first.',db.students.length?'':btn('#/students/new','plus','New student'));
+    $('#blist').querySelectorAll('input').forEach(cb=>cb.onchange=()=>{ const id=Number(cb.value); cb.checked?sel.add(id):sel.delete(id); cb.closest('label').classList.toggle('on',cb.checked); drawSum(); });
+  };
+  const drawSum=()=>{
+    const s=get('sections',secId); const n=s?enrolledCount(s.id):0; const free=s?Math.max(0,s.capacity-n):0; const k=sel.size;
+    const over=status==='enrolled'&&s&&k>free?k-free:0;
+    $('#bsum').innerHTML=`<h3 class="step" style="margin-bottom:14px"><span>3</span>Review & enroll</h3>
+      ${s?`<b>${esc(secName(s))}</b><span class="sub">${esc(courseCode(get('courses',s.course_id)))} · ${range(s.start_date,s.end_date)}</span><div style="margin:12px 0">${meter(n,s.capacity)}</div>`:'<p class="muted">No section selected yet.</p>'}
+      <div class="kv"><span>Selected students</span><b>${k}</b></div>
+      ${k?`<div class="chips">${[...sel].map(id=>{const p=get('students',id);return `<span class="chip">${esc(studentName(p))}<button type="button" data-rm="${id}" aria-label="Remove ${esc(studentName(p))}">${icon('x',14)}</button></span>`;}).join('')}</div>`:''}
+      <div class="f" style="margin-top:12px"><label for="bst">Enroll as</label><select id="bst"><option value="enrolled" ${status==='enrolled'?'selected':''}>Enrolled</option><option value="waitlisted" ${status==='waitlisted'?'selected':''}>Waitlisted</option></select></div>
+      ${over?`<div class="note">${icon('alert',16)}<span>Only ${free} seat${free===1?'':'s'} left. ${over} student${over>1?'s':''} will be added to the waitlist.</span></div>`:''}
+      ${!s||!k?`<div class="note info">${icon('alert',16)}<span>${!s?'Choose a section':'Select at least one student'} to continue.</span></div>`:''}
+      <button class="btn primary block" id="go" ${s&&k?'':'disabled'} style="margin-top:12px">${icon('check',16)}Enroll ${k||''} student${k===1?'':'s'}</button>`;
+    $('#bst').onchange=e=>{status=e.target.value;drawSum();};
+    $('#bsum').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{sel.delete(Number(b.dataset.rm));drawList();drawSum();});
+    $('#go').onclick=create;
+  };
+  const create=()=>{
+    const s=get('sections',secId); let ok=0, wait=0;
+    for(const id of sel){
+      if(inSec(id)) continue;
+      let st=status;
+      if(st==='enrolled'&&enrolledCount(s.id)>=s.capacity){ st='waitlisted'; wait++; }
+      insert('enrollments',{student_id:id,section_id:s.id,status:st,result:'',enrolled_on:today(),updated_on:today()}); ok++;
+    }
+    save(); toast(wait?`${ok-wait} enrolled, ${wait} waitlisted`:`${ok} student${ok===1?'':'s'} added to ${secName(s)}`);
+    location.hash='#/sections/view/'+s.id;
+  };
+  const bsec=$('#bsec'); if(bsec) bsec.onchange=()=>{ secId=Number(bsec.value)||0; [...sel].forEach(id=>inSec(id)&&sel.delete(id)); drawList(); drawSum(); };
+  $('#bq').oninput=e=>{query=e.target.value;drawList();};
+  $('#ball').onclick=()=>{ shown().forEach(s=>!inSec(s.id)&&sel.add(s.id)); drawList(); drawSum(); };
+  drawList(); drawSum();
+}
+
+/* ================= Overview ================= */
+function overview(){
+  const cur=db.terms.find(t=>period(t.start_date,t.end_date)[0]==='In progress');
+  const active=db.enrollments.filter(e=>COUNTS.includes(e.status)).length;
+  const stats=[['students','Students',db.students.length],['enrollments','Active enrollments',active],['sections','Sections',db.sections.length],['courses','Courses',db.courses.length],['terms','Terms',db.terms.length]];
+  const steps=[['terms','Create a term'],['courses','Add courses'],['sections','Schedule sections'],['students','Register students'],['enrollments','Enroll students'],['attendance','Take attendance']];
+  const setupDone=steps.every(([k])=>db[k].length>0);
+  const secs=db.sections.filter(s=>s.status==='active').sort((a,b)=>a.start_date.localeCompare(b.start_date));
+  const t=today(), todayCls=classesOn(t), pend=allPending();
+  let nextCls=null; for(let i=1;i<=90&&!nextCls;i++){ const d=new Date(); d.setDate(d.getDate()+i); const c=classesOn(iso(d)); if(c.length) nextCls={d:iso(d),c:c[0]}; }
+  const h=new Date().getHours(), greet=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+  app.innerHTML=pageHead({title:greet,sub:`${longDate(t)}${cur?` · <b>${esc(cur.name)}</b>`:''}`,actions:btn('#/students/new','plus','New student','secondary')+btn('#/enrollments/bulk','userplus','Enroll students')})+`
+    <div class="cols">
+      <div class="stack">
+        <div class="card"><div class="hd"><h3 class="ih">${icon('calendar',18)}Today's classes</h3><span class="muted small">${todayCls.length||'No'} class${todayCls.length===1?'':'es'}</span></div>
+          ${todayCls.length?`<ul class="today">${todayCls.map(({sec,m,mi})=>{
+              const n=roster(sec.id).length, recs=attFor(sec.id,t,mi), ses=db.sessions.find(s=>s.section_id===sec.id&&s.date===t&&s.meeting===mi&&s.open);
+              const st=recs.length?`<span class="pill ok">${recs.length}/${n} marked</span>`:ses?'<span class="pill info">QR open</span>':'<span class="pill warn">Not taken</span>';
+              return `<li><div class="tt"><b>${t12(m.start)}</b><span class="sub">${t12(m.end)}</span></div>
+                <div class="grow"><a class="lnk" href="#/sections/view/${sec.id}">${esc(secName(sec))}</a><span class="sub">${esc(sec.location_name||'')}${sec.location_name?' · ':''}${n} student${n===1?'':'s'}</span></div>${st}
+                <div class="btns-row"><a class="btn secondary sm" href="${attLink(sec.id,t,mi,'qr')}">${icon('qr',14)}QR</a><a class="btn primary sm" href="${attLink(sec.id,t,mi)}">${icon('clip',14)}Take attendance</a></div></li>`;}).join('')}</ul>`
+            :emptyState('calendar','No classes today',nextCls?`Next class: <b>${esc(secName(nextCls.c.sec))}</b> on ${longDate(nextCls.d)} at ${t12(nextCls.c.m.start)}.`:'There are no upcoming classes scheduled.',nextCls?`<a class="btn secondary" href="${attLink(nextCls.c.sec.id,nextCls.d,nextCls.c.mi)}">Open that class</a>`:btn('#/sections/new','plus','Schedule a section'))}
+        </div>
+        <div class="card"><div class="hd"><h3 class="ih">${icon('alert',18)}Attendance to catch up</h3>${pend.length?`<span class="pill warn">${pend.length} missing</span>`:''}</div>
+          ${pend.length?`<ul class="today">${pend.slice(0,8).map(p=>`<li><div class="tt"><b>${D(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b><span class="sub">${DAYS[D(p.date).getDay()].slice(0,3)}</span></div>
+              <div class="grow"><b>${esc(secName(p.sec))}</b><span class="sub">${esc(meetShort(p.sec.meetings[p.mi]))} · ${roster(p.sec.id).length} students</span></div>
+              <a class="btn secondary sm" href="${attLink(p.sec.id,p.date,p.mi)}">${icon('edit',14)}Record</a></li>`).join('')}</ul>
+              ${pend.length>8?`<div class="padx muted small">+${pend.length-8} more in <a href="#/attendance">Attendance</a>.</div>`:''}`
+            :`<div class="empty" style="padding:28px"><div class="ic" style="background:var(--green-50);color:var(--green-d)">${icon('check',22)}</div><p style="margin:0">Every past class has attendance. Great job!</p></div>`}
+        </div>
+      </div>
+      <div class="stack">
+        <div class="stats mini">${stats.map(([k,l,n])=>`<a class="stat" href="#/${k}"><span class="ic">${icon(E[k].icon,20)}</span><div><b>${n}</b><span>${l}</span></div></a>`).join('')}</div>
+        ${setupDone?'':`<div class="card"><div class="hd"><h3>Getting started</h3><span class="muted small">${steps.filter(([k])=>db[k].length).length}/${steps.length}</span></div><ol class="steps">
+          ${steps.map(([k,l],i)=>{const done=db[k].length>0;return `<li class="${done?'done':''}"><span class="dot">${done?icon('check',14):i+1}</span><span class="t">${l}</span><a href="#/${k}${done||k==='attendance'?'':'/new'}">${done?'View':'Start'}</a></li>`;}).join('')}
+        </ol></div>`}
+        <div class="card"><div class="hd"><h3>Active sections</h3><a class="btn secondary sm" href="#/sections">View all</a></div>
+          ${secs.length?`<ul class="today">${secs.map(s=>`<li><div class="grow"><a class="lnk" href="#/sections/view/${s.id}">${esc(secName(s))}</a><span class="sub">${range(s.start_date,s.end_date)}</span></div>${meter(enrolledCount(s.id),s.capacity)}</li>`).join('')}</ul>`
+            :emptyState('layers','No active sections','Schedule a section to start enrolling students.',btn('#/sections/new','plus','New section'))}</div>
+        <div class="card pad"><h3 style="margin:0 0 4px;font-size:16px">Test data</h3>
+          <p class="muted" style="margin:0;font-size:13.5px">${CLOUD?'Data is saved online and shared by all staff. Keep a backup here; loading or clearing data affects everyone.':'Data is saved only in this browser. Reset it or keep a backup here.'}</p>
+          <div class="tools">
+            <button class="btn secondary sm" id="tSeed">Load sample data</button>
+            <button class="btn secondary sm" id="tExp">Export JSON</button>
+            <label class="btn secondary sm" tabindex="0">Import JSON<input type="file" id="tImp" accept=".json,application/json" hidden></label>
+            <button class="btn secondary sm" id="tClear" style="color:var(--danger)">Start empty</button>
+          </div></div>
+      </div>
+    </div>`;
+  $('#tSeed').onclick=async()=>{ if(await ask({title:'Load sample data?',msg:CLOUD?'All current data (for every staff member) will be replaced with fictitious sample data. Export a backup first if you need it.':'All current data will be replaced with the sample data.',ok:'Load sample data',danger:false})){ seed(); toast('Sample data loaded'); route(); } };
+  $('#tClear').onclick=async()=>{ if(await ask({title:'Delete all data?',msg:'Every term, course, section, student and enrollment will be removed. Export a backup first if you need it.',ok:'Delete everything'})){ db=blank(); save(); toast('All data cleared'); route(); } };
+  $('#tExp').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'})); a.download=`prc-data-${today()}.json`; a.click(); toast('Backup downloaded'); };
+  $('#tImp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(txt=>{ try{ const d=JSON.parse(txt); if(!CORE.every(t=>Array.isArray(d[t]))) throw 0; db=normalize(d); save(); toast('Data imported'); route(); }catch(_){ toast('That file is not a valid backup.',true); } }); };
+}
+
+/* ================= Attendance ================= */
+let VIEW={};   // current view hooks (refresh when new check-ins arrive)
+
+function attendanceHome(){
+  setTimeout(wireMove);
+  const secs=db.sections.filter(s=>s.status==='active').sort((a,b)=>a.start_date.localeCompare(b.start_date));
+  const pend=allPending();
+  app.innerHTML=pageHead({crumbs:[['','Attendance']],title:'Attendance',sub:'Choose a section to take attendance manually, with a self check-in QR code, or to catch up on past classes.'})+
+  (FILE_MODE?serverHelp():'')+
+  (pend.length?`<div class="note pendnote">${icon('alert',16)}<span><b>${pend.length} past class${pend.length>1?'es':''} without attendance.</b></span><a class="btn secondary sm" href="${attLink(pend[0].sec.id,pend[0].date,pend[0].mi)}">Start with ${esc(secName(pend[0].sec))} · ${fmt(pend[0].date)}</a></div>`:'')+
+  `<div class="card">${secs.length?table([
+      {h:'Section',cell:s=>`<a class="lnk" href="#/attendance/${s.id}">${esc(secName(s))}</a><span class="sub">${esc(get('terms',s.term_id)?.name)}</span>`},
+      {h:'Schedule',cell:s=>(s.meetings||[]).length?s.meetings.map(m=>`<span class="nowrap">${esc(meetShort(m))}</span>`).join('<br>'):'<span class="muted">No schedule</span>'},
+      {h:'Next class',cls:'nowrap',cell:s=>{const n=classDays(s,-1).find(d=>d>=today());return n?fmt(n):dash;}},
+      {h:'Students',cell:s=>roster(s.id).length},
+      {h:'Missing',cell:s=>{const p=pendingDays(s);return p.length?`<a class="pill warn" href="${attLink(s.id,p[0].date,p[0].mi)}" title="Open the most recent class without attendance">${p.length} class${p.length>1?'es':''}</a>`:'<span class="pill ok">Up to date</span>';}},
+      {h:'Attendance rate',cell:s=>rateHtml(s.id)}],secs,
+      s=>`<a class="btn primary sm" href="#/attendance/${s.id}">${icon('clip',14)}Take attendance</a> <a class="btn secondary sm" href="#/attendance/${s.id}?tab=qr" title="Self check-in QR">${icon('qr',14)}QR</a>`)
+    :emptyState('clip','No active sections','Schedule a section to start taking attendance.',btn('#/sections/new','plus','New section'))}</div>`;
+}
+
+function attendanceView(secId,q){
+  const sec=get('sections',secId); if(!sec){ location.hash='#/attendance'; return; }
+  const meets=sec.meetings||[];
+  // Only real class days can be selected: the section's meeting weekdays between its start and end dates.
+  // (A section without meeting times allows any day between its start and end dates.)
+  const DAYLIST=meets.length?classDays(sec,-1):(()=>{ const out=[]; if(sec.start_date&&sec.end_date) for(let d=D(sec.start_date);d<=D(sec.end_date);d.setDate(d.getDate()+1)) out.push(iso(d)); return out; })();
+  const ALLOWED=new Set(DAYLIST);
+  // Which meeting time belongs to a date (e.g. Monday → "Monday 6–8 PM")
+  const miFor=(date,pref)=>{ if(!meets.length) return -1; const dow=D(date).getDay(); const idx=meets.map((m,i)=>m.day===dow?i:-1).filter(i=>i>=0); return idx.includes(pref)?pref:(idx.length?idx[0]:pref); };
+  const latest=list=>{ const t=today(), past=list.filter(d=>d<=t); return past.length?past[past.length-1]:(list[0]||null); };
+  const qmi=Number(q.get('mi'));
+  const S={tab:['qr','history'].includes(q.get('tab'))?q.get('tab'):'manual',mi:meets.length?(qmi>=0&&qmi<meets.length?qmi:0):-1,date:null,month:null,draft:null,dirty:false};
+  S.date=ALLOWED.has(q.get('date'))?q.get('date'):(latest(DAYLIST)||today());
+  S.mi=miFor(S.date,S.mi); S.month=S.date.slice(0,7);
+  const go=async(date,mi,tab=S.tab)=>{
+    if(!ALLOWED.has(date)) return;
+    if(!await confirmLeave()) return;
+    S.date=date; S.mi=mi??miFor(date,S.mi); S.tab=tab; S.month=date.slice(0,7); S.draft=null; S.dirty=false; $('#amt').value=S.mi; drawCal(); drawPane();
+  };
+  const schedLabel=()=>S.mi>=0?meetLabel(meets[S.mi]):'Any time';
+
+  app.innerHTML=pageHead({crumbs:[['#/attendance','Attendance'],['',secName(sec)]],title:'Attendance',
+      sub:`${esc(secName(sec))} · <span class="code">${esc(courseCode(get('courses',sec.course_id)))}</span>`,
+      actions:btn(`#/sections/view/${sec.id}`,'eye','View section','secondary')})+`
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="manual">${icon('calendar',16)}Manual entry</button>
+      <button role="tab" data-tab="qr">${icon('qr',16)}Self check-in QR</button>
+      <button role="tab" data-tab="history">${icon('list',16)}History</button>
+    </div>
+    <div id="pendBar"></div>
+    <div class="att">
+      <section class="card pad">
+        <h3 class="h3">Class date</h3><p class="muted small" style="margin:2px 0 14px">Select a schedule and a date to mark or correct attendance.</p>
+        <div class="f"><label for="amt">Intended schedule</label>
+          <select id="amt">${meets.length?meets.map((m,i)=>`<option value="${i}">${esc(meetLabel(m))}</option>`).join(''):'<option value="-1">No schedule set (any day)</option>'}</select>
+          ${meets.length?'':`<small class="help">Add meeting times in <a href="#/sections/edit/${sec.id}">Edit section</a> to highlight class days.</small>`}</div>
+        <div class="f" style="margin-top:14px"><span class="lb">Attendance date</span><div id="cal"></div></div>
+      </section>
+      <section class="card" id="pane"></section>
+    </div>`;
+
+  const confirmLeave=async()=>!S.dirty||await ask({title:'Discard unsaved changes?',msg:'You marked attendance for this date but did not save it.',ok:'Discard'});
+  const drawCal=()=>{
+    const [y,m]=S.month.split('-').map(Number);
+    const first=new Date(y,m-1,1), dim=new Date(y,m,0).getDate(), cellsN=Math.ceil((first.getDay()+dim)/7)*7;
+    const rec=new Set(db.attendance.filter(a=>a.section_id===sec.id).map(a=>a.date));
+    const pend=new Set(pendingDays(sec).map(p=>p.date));
+    // Months that contain class days: the arrows jump straight between them
+    const months=[...new Set(DAYLIST.map(d=>d.slice(0,7)))];
+    const prevM=[...months].reverse().find(x=>x<S.month), nextM=months.find(x=>x>S.month);
+    if(!DAYLIST.length){
+      $('#cal').innerHTML=`<div class="cal"><div class="empty" style="padding:20px 8px">${icon('calendar',22)}<p style="margin:8px 0 0">This section has no class days.<br>Check the dates and meeting times in <a href="#/sections/edit/${sec.id}">Edit section</a>.</p></div></div>`;
+      drawPend(); return;
+    }
+    let cells='';
+    for(let i=0;i<cellsN;i++){
+      const d=new Date(y,m-1,1-first.getDay()+i), k=iso(d);
+      // Only class days are shown; every other day is left blank so it can't be confused or picked
+      if(!ALLOWED.has(k)||d.getMonth()!==m-1){ cells+='<span class="day blank" aria-hidden="true"></span>'; continue; }
+      cells+=`<button type="button" class="day cls ${pend.has(k)?'pend':''} ${k===S.date?'sel':''} ${k===today()?'today':''}" data-d="${k}"
+        title="${esc(meets.length?meets.filter(x=>x.day===d.getDay()).map(meetShort).join(', '):'Class day')}${pend.has(k)?' · attendance missing':rec.has(k)?' · recorded':''}"
+        aria-label="${longDate(k)}${rec.has(k)?', attendance recorded':''}${pend.has(k)?', attendance missing':''}" ${k===S.date?'aria-pressed="true"':''}>${rec.has(k)?'<i></i>':''}${d.getDate()}</button>`;
+    }
+    $('#cal').innerHTML=`<div class="cal"><div class="cal-h"><button type="button" class="ibtn" data-mo="${prevM||''}" aria-label="Previous month with classes" ${prevM?'':'disabled'}>${icon('chevL')}</button>
+      <b>${first.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</b><button type="button" class="ibtn" data-mo="${nextM||''}" aria-label="Next month with classes" ${nextM?'':'disabled'}>${icon('chevR')}</button></div>
+      <div class="cal-g">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(x=>`<span>${x}</span>`).join('')}${cells}</div>
+      <div class="cal-l"><span><em class="lgd cls"></em>Class day</span><span><em class="lgd dot"></em>Recorded</span><span><em class="lgd pnd"></em>Missing</span><span><em class="lgd tdy"></em>Today</span></div>
+      <p class="muted small" style="margin:8px 0 0">${meets.length?`Only class days are shown: <b>${[...new Set(meets.map(x=>DAYS[x.day]))].join(', ')}</b>, ${fmt(sec.start_date)} – ${fmt(sec.end_date)}.`:`Any day from ${fmt(sec.start_date)} to ${fmt(sec.end_date)}. Add meeting times to show only class days.`}</p></div>`;
+    $('#cal').querySelectorAll('[data-mo]:not([disabled])').forEach(b=>b.onclick=()=>{ S.month=b.dataset.mo; drawCal(); });
+    $('#cal').querySelectorAll('[data-d]:not([disabled])').forEach(b=>b.onclick=()=>go(b.dataset.d,undefined,S.tab==='history'?'manual':S.tab));
+    drawPend();
+  };
+  /* Banner listing past classes that still need attendance */
+  const drawPend=()=>{
+    const p=pendingDays(sec);
+    $('#pendBar').innerHTML=p.length?`<div class="note pendnote">${icon('alert',16)}<span><b>${p.length} past class${p.length>1?'es':''} without attendance.</b> Click one to fill it in:</span>
+      <span class="chips">${p.slice(0,6).map(x=>`<button type="button" class="chip pchip ${x.date===S.date&&x.mi===S.mi?'on':''}" data-pd="${x.date}" data-pmi="${x.mi}">${fmt(x.date)}${meets.length>1?' · '+esc(meetShort(meets[x.mi]).split(' ')[0]):''}</button>`).join('')}${p.length>6?`<span class="muted small">+${p.length-6} more (see History)</span>`:''}</span></div>`:'';
+    $('#pendBar').querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>go(b.dataset.pd,Number(b.dataset.pmi),'manual'));
+  };
+
+  const drawManual=(focus)=>{
+    const people=roster(sec.id);
+    const recs=Object.fromEntries(attFor(sec.id,S.date,S.mi).map(a=>[a.student_id,a]));
+    if(!S.draft){ S.draft={}; Object.values(recs).forEach(a=>S.draft[a.student_id]=a.status); }
+    const cnt=k=>people.filter(p=>S.draft[p.id]===k).length, unmarked=people.filter(p=>!S.draft[p.id]).length;
+    const days=DAYLIST, notClass=!ALLOWED.has(S.date), future=S.date>today();
+    const prev=[...days].reverse().find(d=>d<S.date), next=days.find(d=>d>S.date&&d<=today());
+    if(notClass){ // safety net: never take attendance on a day without class
+      $('#pane').innerHTML=`<div class="pad">${emptyState('calendar','No class on this day',days.length?`Pick a highlighted day in the calendar. Classes run ${meets.length?'on '+[...new Set(meets.map(x=>DAYS[x.day]))].join(', ')+' ':''}from ${fmt(sec.start_date)} to ${fmt(sec.end_date)}.`:`This section has no class days. Check its meeting times and dates in <a href="#/sections/edit/${sec.id}">Edit section</a>.`,'')}</div>`;
+      return;
+    }
+    $('#pane').innerHTML=`<div class="hd daynav">
+        <button class="ibtn" id="dPrev" ${prev?'':'disabled'} title="${prev?'Previous class: '+fmt(prev):'No earlier class'}" aria-label="Previous class">${icon('chevL')}</button>
+        <div class="grow"><h3>${longDate(S.date)}${S.date===today()?' <span class="pill ok">Today</span>':''}</h3><span class="sub">${esc(schedLabel())}</span></div>
+        <button class="ibtn" id="dNext" ${next?'':'disabled'} title="${next?'Next class: '+fmt(next):'No later class up to today'}" aria-label="Next class">${icon('chevR')}</button>
+        ${people.length&&!future?`<button class="btn secondary sm" id="allP">${icon('check',14)}Mark all present</button>`:''}</div>
+      ${people.length&&future?`<div class="pad">${emptyState('calendar','This class has not happened yet',`You can take attendance on or after ${fmt(S.date)}. Use the calendar or the arrows to pick a past or today's class.`,days.filter(d=>d<=today()).length?`<button class="btn primary" id="goLast">Go to the latest class</button>`:'')}</div>`:''}
+      ${people.length&&!future?`
+        <div class="att-sum">${Object.entries(ATT).map(([k,[l,,t]])=>`<span class="pill ${t}">${l}: ${cnt(k)}</span>`).join('')}<span class="pill">Not marked: ${unmarked}</span></div>
+        ${S.date<today()&&!Object.keys(recs).length?`<div class="note info" style="margin:0 18px 12px">${icon('calendar',16)}<span>You are recording attendance for a past class. Mark each student and press <b>Save attendance</b>.</span></div>`:''}
+        <ul class="roll">${people.map(p=>{const r=recs[p.id];return `<li>${who(p)}
+          ${r?.method==='qr'?`<span class="qrb" title="Self check-in">${icon('qr',13)}Checked in ${tShort(r.time)}</span>`:''}
+          <div class="seg att-seg" role="radiogroup" aria-label="Attendance for ${esc(studentName(p))}">${Object.entries(ATT).map(([k,[l,a,t]])=>`<label title="${l}"><input type="radio" name="a${p.id}" value="${k}" ${S.draft[p.id]===k?'checked':''}><span class="${t}">${a}<span class="lng">${l.slice(1)}</span></span></label>`).join('')}</div></li>`;}).join('')}</ul>
+        <div class="pane-f"><span class="muted small">${S.dirty?`<b style="color:var(--amber)">● Unsaved changes</b>`:`${icon('check',14)} Saved`}</span>
+          <div class="btns"><button class="btn secondary" id="clrA">Clear</button><button class="btn primary" id="saveA">${icon('check',16)}Save attendance</button></div></div>`
+      :''}${people.length?'':emptyState('users','No enrolled students','Enroll students in this section to take attendance.',btn(`#/enrollments/bulk?section=${sec.id}`,'userplus','Add students'))}`;
+    const pv=$('#dPrev'), nx=$('#dNext'), gl=$('#goLast');
+    if(pv) pv.onclick=()=>prev&&go(prev); if(nx) nx.onclick=()=>next&&go(next);
+    if(gl) gl.onclick=()=>go(days.filter(d=>d<=today()).pop());
+    if(!people.length||future) return;
+    $('#pane').querySelectorAll('.roll input').forEach(inp=>inp.onchange=()=>{ S.draft[inp.name.slice(1)]=inp.value; S.dirty=true; drawManual(inp.name+'|'+inp.value); });
+    $('#allP').onclick=()=>{ people.forEach(p=>S.draft[p.id]='present'); S.dirty=true; drawManual(); };
+    $('#clrA').onclick=()=>{ S.draft={}; S.dirty=true; drawManual(); };
+    $('#saveA').onclick=()=>{
+      const now=nowLocal();
+      for(const p of people){
+        const v=S.draft[p.id], r=db.attendance.find(a=>a.section_id===sec.id&&a.student_id===p.id&&a.date===S.date&&a.meeting===S.mi);
+        if(v&&r){ if(r.status!==v){ r.status=v; r.updated=now; } }
+        else if(v) insert('attendance',{section_id:sec.id,student_id:p.id,date:S.date,meeting:S.mi,status:v,method:'manual',time:now});
+        else if(r) db.attendance=db.attendance.filter(a=>a!==r);
+      }
+      save(); S.dirty=false; S.draft=null; drawCal(); drawManual();
+      const nextPend=pendingDays(sec)[0];
+      if(nextPend) toast(`Attendance saved for ${fmt(S.date)}`,false,{label:`Next missing: ${fmt(nextPend.date)}`,run:()=>go(nextPend.date,nextPend.mi,'manual')});
+      else toast(`Attendance saved for ${fmt(S.date)}`);
+    };
+    if(focus){ const [n,v]=focus.split('|'); $(`#pane input[name="${n}"][value="${v}"]`)?.focus(); }
+  };
+
+  const drawQR=()=>{
+    const ses=db.sessions.find(s=>s.section_id===sec.id&&s.date===S.date&&s.meeting===S.mi&&s.open);
+    const people=roster(sec.id);
+    const hdr=`<div class="hd"><div><h3>Self check-in · ${fmt(S.date)}</h3><span class="sub">${esc(schedLabel())}</span></div>${ses?'<span class="pill ok">Open</span>':'<span class="pill">Not started</span>'}</div>`;
+    if(!ses&&S.date!==today()){
+      const todayCls=ALLOWED.has(today());
+      $('#pane').innerHTML=hdr+`<div class="pad">${emptyState('qr','QR check-in is only for today\'s class',
+        S.date<today()?`${fmt(S.date)} already passed. To record or correct attendance for that day, use Manual entry.`:`${fmt(S.date)} has not happened yet. Start the QR check-in on the day of the class.`,
+        `<div class="btns-row" style="justify-content:center">${S.date<today()?`<button class="btn primary" id="toMan">${icon('calendar',16)}Record ${fmt(S.date)} manually</button>`:''}${todayCls?`<button class="btn secondary" id="toToday">${icon('qr',16)}Go to today</button>`:''}</div>`)}</div>`;
+      const tm=$('#toMan'); if(tm) tm.onclick=()=>go(S.date,S.mi,'manual');
+      const tt=$('#toToday'); if(tt) tt.onclick=()=>go(today(),undefined,'qr');
+      return;
+    }
+    const note=CLOUD?`<div class="note info">${icon('wifi',16)}<span>Works from <b>any phone with internet</b> (Wi-Fi or mobile data). Parents don't need a password.</span></div>`
+      :SYNC?`<div class="note info">${icon('wifi',16)}<span>Phones must be on the <b>same Wi-Fi</b> as this computer (not on mobile data).</span></div>
+        <details class="trouble"><summary>The QR doesn't open on the phone?</summary><ol>
+          <li>Check that the phone is connected to the same Wi-Fi network as this computer, with mobile data turned off.</li>
+          <li>Keep the black <b>server window</b> (Iniciar.bat) open during the class.</li>
+          <li>If Windows asks whether Python may use the network, choose <b>Allow</b>.</li>
+          <li>Guest or school Wi-Fi networks sometimes block devices from talking to each other. Then use the <b>kiosk</b> on this computer or a tablet instead.</li>
+          <li>You can also type this address in the phone browser: <b>${esc(API?.ip||'')}:${esc(API?.port||'')}</b></li></ol></details>`
+      :serverHelp();
+    if(!ses){
+      $('#pane').innerHTML=hdr+`<div class="pad">
+        <ol class="howto"><li>Start check-in for the selected date.</li><li>Students scan the QR code with their phone camera.</li><li>They type only their <b>name</b> and <b>phone number</b>.</li><li>They are marked <b>Present</b> automatically and appear here.</li></ol>
+        ${note}
+        ${people.length?`<button class="btn primary" id="startQ">${icon('qr',16)}Start check-in for ${fmt(S.date)}</button>`:'<p class="muted">There are no enrolled students in this section yet.</p>'}</div>`;
+      const b=$('#startQ'); if(b) b.onclick=()=>{ insert('sessions',{section_id:sec.id,date:S.date,meeting:S.mi,token:newToken(),open:true,created:nowLocal()}); save(); drawQR(); };
+      wireMove();
+      return;
+    }
+    const url=(CLOUD?location.origin+'/':SYNC&&API?.ip?`http://${API.ip}:${API.port}/`:location.href.split('#')[0])+'#/checkin/'+ses.token;
+    const checked=attFor(sec.id,S.date,S.mi).filter(a=>a.method==='qr').sort((a,b)=>(b.time||'').localeCompare(a.time||''));
+    $('#pane').innerHTML=hdr+`<div class="qr-wrap">
+        ${SYNC?`<div class="qr-box"><div id="qr" role="img" aria-label="QR code to check in"></div><p class="muted small">Scan with the phone camera</p></div>`:''}
+        <div class="qr-side">${note}
+          ${SYNC?`<label class="lb" for="qurl">Check-in link</label><div class="copy"><input id="qurl" readonly value="${esc(url)}"><button class="btn secondary sm" id="cpy">Copy</button></div>`:''}
+          <div class="btns-row"><a class="btn secondary" href="${esc(url)}" target="_blank" rel="noopener">${icon('eye',16)}Open kiosk on this device</a><button class="btn danger" id="closeQ">${icon('x',16)}Close check-in</button></div>
+        </div></div>
+      <div class="hd" style="border-top:1px solid var(--border)"><h3>Checked in (${checked.length} of ${people.length})</h3><span class="muted small">Updates automatically</span></div>
+      ${checked.length?`<ul class="roll">${checked.map(a=>`<li>${who(get('students',a.student_id))}<span class="pill ok">${tShort(a.time)}</span></li>`).join('')}</ul>`
+        :`<div class="empty" style="padding:28px">${icon('qr',22)}<p style="margin:8px 0 0">Waiting for the first check-in…</p></div>`}`;
+    if(SYNC) renderQR($('#qr'),url);
+    wireMove();
+    const cpy=$('#cpy'); if(cpy) cpy.onclick=()=>{ navigator.clipboard?.writeText(url).then(()=>toast('Link copied'),()=>{ $('#qurl').select(); }); };
+    $('#closeQ').onclick=async()=>{ if(await ask({title:'Close check-in?',msg:'Students will no longer be able to check in with this QR code. Attendance already recorded is kept.',ok:'Close check-in'})){ ses.open=false; save(); drawQR(); toast('Check-in closed'); } };
+  };
+
+  /* History: every class day up to today × every student */
+  const drawHistory=()=>{
+    const people=roster(sec.id), t=today();
+    const cols=(meets.length?meets.flatMap((m,mi)=>classDays(sec,mi).map(d=>({d,mi}))):[...new Set(db.attendance.filter(a=>a.section_id===sec.id).map(a=>a.date))].map(d=>({d,mi:-1})))
+      .filter(c=>c.d<=t).sort((a,b)=>a.d.localeCompare(b.d)||a.mi-b.mi);
+    const recOf=(p,c)=>db.attendance.find(a=>a.section_id===sec.id&&a.student_id===p.id&&a.date===c.d&&a.meeting===c.mi);
+    const taken=c=>db.attendance.some(a=>a.section_id===sec.id&&a.date===c.d&&a.meeting===c.mi);
+    $('#pane').innerHTML=`<div class="hd"><div><h3>Attendance history</h3><span class="sub">${cols.length} class${cols.length===1?'':'es'} so far · click a date or a cell to open that day</span></div></div>
+      ${!people.length?emptyState('users','No enrolled students','Enroll students in this section to see their history.',''):!cols.length?emptyState('calendar','No classes yet','Past and today\'s classes will appear here.',''):`
+      <div class="tw"><table class="hist"><thead><tr><th class="hn">Student</th>${cols.map(c=>`<th class="${taken(c)?'':'miss'}"><button type="button" data-hd="${c.d}" data-hmi="${c.mi}" title="${longDate(c.d)}${taken(c)?'':' · attendance missing'}">${D(c.d).toLocaleDateString('en-US',{month:'short',day:'numeric'})}${meets.length>1?`<small>${esc(DAYS[meets[c.mi].day].slice(0,3))}</small>`:''}</button></th>`).join('')}<th>Rate</th></tr></thead>
+      <tbody>${people.map(p=>`<tr><td class="hn">${esc(studentName(p))}</td>${cols.map(c=>{const r=recOf(p,c);const a=r?ATT[r.status]:null;return `<td class="hc"><button type="button" class="hcell ${a?a[2]:taken(c)?'none':'miss'}" data-hd="${c.d}" data-hmi="${c.mi}" title="${esc(studentName(p))} · ${fmt(c.d)}: ${a?a[0]:'not marked'}">${a?a[1]:'–'}</button></td>`;}).join('')}<td>${rateHtml(sec.id,p.id)}</td></tr>`).join('')}</tbody></table></div>
+      <div class="cal-l" style="padding:10px 18px 14px">${Object.values(ATT).map(([l,a,tn])=>`<span><b class="hcell ${tn} key">${a}</b>${l}</span>`).join('')}<span><b class="hcell miss key">–</b>Not taken</span></div>`}`;
+    $('#pane').querySelectorAll('[data-hd]').forEach(b=>b.onclick=()=>go(b.dataset.hd,Number(b.dataset.hmi),'manual'));
+  };
+
+  const drawPane=()=>{ app.querySelectorAll('[data-tab]').forEach(b=>{ const on=b.dataset.tab===S.tab; b.setAttribute('aria-selected',on); b.classList.toggle('on',on); }); S.tab==='qr'?drawQR():S.tab==='history'?drawHistory():drawManual(); };
+  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=async()=>{ if(b.dataset.tab===S.tab) return; if(!await confirmLeave()) return; S.dirty=false; S.draft=null; S.tab=b.dataset.tab; drawPane(); });
+  // Choosing another meeting time jumps to that meeting's most recent class day
+  $('#amt').onchange=async e=>{
+    if(!await confirmLeave()){ e.target.value=S.mi; return; }
+    S.mi=Number(e.target.value);
+    if(S.mi>=0&&D(S.date).getDay()!==meets[S.mi].day){ const d=latest(classDays(sec,S.mi)); if(d) S.date=d; }
+    S.month=S.date.slice(0,7); S.draft=null; S.dirty=false; drawCal(); drawPane();
+  };
+  VIEW.refresh=()=>{ drawCal(); if(S.tab==='qr') drawQR(); else if(S.tab==='history') drawHistory(); else if(!S.dirty){ S.draft=null; drawManual(); } };
+  $('#amt').value=S.mi;
+  drawCal(); drawPane();
+}
+
+/* ---- Where the app runs: online (Netlify), local server (Iniciar.bat) or the file opened directly ---- */
+const FILE_MODE=location.protocol==='file:';
+const SERVER_URL='http://localhost:8765';
+const CLOUD_URL='https://prcapp.netlify.app';
+function serverHelp(){
+  if(FILE_MODE) return `<div class="note">${icon('alert',16)}<div><b>Phones can't scan the QR in this version.</b> You opened <i>index.html</i> directly from the computer.
+      Use the online version at <a href="${CLOUD_URL}" target="_blank" rel="noopener"><b>prcapp.netlify.app</b></a>: the QR works there from any phone.
+      <div class="btns-row" style="margin-top:10px"><button type="button" class="btn primary sm" data-move="cloud">${icon('wifi',14)}Move my data to the online version</button>
+      <button type="button" class="btn secondary sm" data-move="local">Move it to Iniciar.bat instead</button></div>
+      <span class="muted small" style="display:block;margin-top:6px">Meanwhile you can still use this computer as a check-in kiosk.</span></div></div>`;
+  return `<div class="note">${icon('alert',16)}<span>Phones can't reach this page. Use the online version at <a href="${CLOUD_URL}"><b>prcapp.netlify.app</b></a>.</span></div>`;
+}
+function wireMove(){ document.querySelectorAll('[data-move]').forEach(b=>b.onclick=e=>{ e.preventDefault(); moveToServer(b.dataset.move==='local'?SERVER_URL:CLOUD_URL); }); }
+/* Copies this browser's data into the online/server version (opens it in a new window and hands the data over) */
+async function moveToServer(target=CLOUD_URL){
+  const online=target===CLOUD_URL;
+  if(!await ask({title:online?'Move your data to the online version?':'Move your data to the Iniciar.bat version?',
+    msg:online?'A new window opens the online version. Sign in with the staff password and confirm the copy there. The data currently online will be replaced.'
+              :'First double-click Iniciar.bat so the server is running. A new window will open; confirm the copy there. Its current data will be replaced.',ok:'Continue',danger:false})) return;
+  const w=window.open(target+'/#/receive','prc-'+(online?'cloud':'server'));
+  if(!w){ toast('The browser blocked the new window. Allow pop-ups for this page and try again.',true); return; }
+  let ready=false;
+  const onMsg=e=>{
+    if(e.source!==w||e.origin!==target) return;
+    if(e.data?.type==='prc-ready'){ ready=true; w.postMessage({type:'prc-data',data:db},target); }
+    if(e.data?.type==='prc-done'){ window.removeEventListener('message',onMsg); toast(`Done! Your data is in the ${online?'online':'server'} version. Use that window from now on.`); }
+  };
+  window.addEventListener('message',onMsg);
+  if(!online) setTimeout(()=>{ if(!ready) toast('The server version did not answer. Double-click Iniciar.bat, wait a few seconds and try again.',true); },8000);
+}
+/* Server side of the hand-over: #/receive */
+function receiveView(){
+  app.innerHTML=pageHead({title:'Move data to the server version'})+`<div class="card pad" id="rcv"><p class="muted">Waiting for the data from the other window…</p></div>`;
+  if(!SYNC){ $('#rcv').innerHTML=`<p>Open this page from the online version (<b>${CLOUD_URL}</b>) or from Iniciar.bat (<b>${SERVER_URL}</b>).</p>`; return; }
+  if(!window.opener){ $('#rcv').innerHTML=`<p>Open the old version (index.html) and click <b>Move my data to the server version</b>.</p><a class="btn secondary" href="#/overview">Go to Home</a>`; return; }
+  const onMsg=e=>{
+    if(e.source!==window.opener||e.data?.type!=='prc-data') return;
+    window.removeEventListener('message',onMsg);
+    const d=e.data.data;
+    if(!d||!CORE.every(t=>Array.isArray(d[t]))){ $('#rcv').innerHTML='<p>The data received is not valid.</p>'; return; }
+    $('#rcv').innerHTML=`<p>Received from the offline version: <b>${d.students.length} students, ${d.sections.length} sections, ${d.enrollments.length} enrollments, ${(d.attendance||[]).length} attendance records</b>.</p>
+      <p class="muted">This version currently has ${db.students.length} students and ${db.sections.length} sections; they will be replaced.</p>
+      <div class="btns-row"><button class="btn primary" id="rcvOk">${icon('check',16)}Replace with my data</button><a class="btn secondary" href="#/overview">Cancel</a></div>`;
+    $('#rcvOk').onclick=()=>{
+      db=normalize(JSON.parse(JSON.stringify(d))); save();
+      try{ window.opener.postMessage({type:'prc-done'},'*'); }catch(_){}
+      location.hash='#/overview'; toast('Your data is now in the server version');
+    };
+  };
+  window.addEventListener('message',onMsg);
+  window.opener.postMessage({type:'prc-ready'},'*');
+}
+
+let qrLib;
+function renderQR(el,text){
+  qrLib=qrLib||new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+  qrLib.then(()=>{ el.innerHTML=''; new QRCode(el,{text,width:230,height:230,colorDark:'#16365c',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); })
+       .catch(()=>{ qrLib=null; el.innerHTML='<p class="muted small" style="max-width:220px">The QR code needs an internet connection to draw. Share the link instead.</p>'; });
+}
+
+/* Mark a student present from a self check-in */
+function markQr(sec,stu,date,mi,time){
+  const a=db.attendance.find(x=>x.section_id===sec&&x.student_id===stu&&x.date===date&&x.meeting===mi);
+  if(a){ if(a.status!=='present'&&a.status!=='late') a.status='present'; a.method='qr'; a.time=time; }
+  else insert('attendance',{section_id:sec,student_id:stu,date,meeting:mi,status:'present',method:'qr',time});
+}
+/* Import check-ins received by server.py */
+async function pullCheckins(){
+  if(!SYNC) return;
+  let r; try{ r=await api('/api/checkins'); }catch(e){ return; }
+  if(!r.ok||!Array.isArray(r.data)) return;
+  const idOf=c=>c.key||c.uid;
+  const done=new Set(db.ckImported); let n=0;
+  for(const c of r.data){ if(done.has(idOf(c))) continue; markQr(c.section_id,c.student_id,c.date,c.meeting,c.time); db.ckImported.push(idOf(c)); n++; }
+  if(!CLOUD){ if(n){ save(); VIEW.refresh?.(); } return; }
+  // Online: save the new attendance first, then tell the server those check-ins are stored
+  let saved=true;
+  if(n){ clearTimeout(putTimer); saved=await doPush(); VIEW.refresh?.(); }
+  const keys=r.data.map(idOf).filter(k=>db.ckImported.includes(k));
+  if(saved&&keys.length&&!putBusy){
+    await api('/api/checkins/ack',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keys})}).catch(()=>{});
+    db.ckImported=db.ckImported.filter(k=>!keys.includes(k));
+  }
+}
+/* Check-in on this same device (kiosk, no server) */
+function localCheckin(tok,name,phone){
+  db=load();
+  const s=db.sessions.find(x=>x.token===tok&&x.open&&x.date===today()); if(!s) return {ok:false,code:'closed'};
+  const nm=normName(name), ph=normPhone(phone);
+  if(!nm) return {ok:false,code:'name'};
+  if(ph.length<7) return {ok:false,code:'phone'};
+  const st=roster(s.section_id).find(p=>normPhone(p.phone)===ph&&nameMatch(p,nm));
+  if(!st) return {ok:false,code:'nomatch'};
+  const already=db.attendance.some(a=>a.section_id===s.section_id&&a.student_id===st.id&&a.date===s.date&&a.meeting===s.meeting&&a.method==='qr');
+  if(!already){ markQr(s.section_id,st.id,s.date,s.meeting,nowLocal()); save(); }
+  return {ok:true,already,first_name:st.first_name};
+}
+
+/* ================= Student check-in page (opened from the QR) ================= */
+const CK_ERR={
+  name:'Please enter your name. / Escriba su nombre.',
+  phone:'Please enter a valid phone number. / Escriba un número de teléfono válido.',
+  nomatch:'We couldn\'t find you in this class. Check your name and phone number, or ask a staff member. / No le encontramos en esta clase. Revise su nombre y teléfono o pida ayuda al personal.',
+  closed:'Check-in is closed. / El registro está cerrado.',
+  network:'Connection problem. Please try again. / Problema de conexión. Intente de nuevo.'};
+const ckShell=inner=>`<div class="ck"><div class="ck-card"><img class="ck-logo" src="logo.png" alt="Madera Unified School District · Parent Resource Centers">${inner}</div></div>`;
+async function checkinView(tok){
+  document.body.classList.add('kiosk');
+  document.title='Check in · Parent Resource Centers';
+  let info=null;
+  if(API){ try{ const r=await api('/api/session/'+encodeURIComponent(tok)); if(r.ok) info=r.data; }catch(e){} }
+  else { db=load(); const s=db.sessions.find(x=>x.token===tok&&x.open&&x.date===today()); if(s){ const sec=get('sections',s.section_id); info={section:secName(sec),date:s.date,meeting:sec?.meetings?.[s.meeting]||null}; } }
+  if(!info){ app.innerHTML=ckShell(`<div class="ck-ic bad">${icon('x',30)}</div><h1>Check-in is closed<span>El registro está cerrado</span></h1><p class="ck-meta">Please ask a staff member for help.<br>Pida ayuda al personal.</p>`); return; }
+  const meta=`<p class="ck-meta"><b>${esc(info.section)}</b><br>${longDate(info.date)}${info.meeting?`<br>${t12(info.meeting.start)} – ${t12(info.meeting.end)}`:''}</p>`;
+  const form=()=>{
+    app.innerHTML=ckShell(`<h1>Check in<span>Registro de asistencia</span></h1>${meta}
+      <form id="ck" novalidate>
+        <div class="f"><label for="ckn">Full name <span>/ Nombre completo</span></label><input id="ckn" autocomplete="name" placeholder="e.g. Maria Lopez"></div>
+        <div class="f"><label for="ckp">Phone number <span>/ Número de teléfono</span></label><input id="ckp" type="tel" inputmode="tel" autocomplete="tel" placeholder="559-555-0100"></div>
+        <div class="err" id="ckerr" role="alert"></div>
+        <button class="btn primary block lg" type="submit">${icon('check',18)}Check in / Registrarme</button>
+      </form>`);
+    $('#ckn').focus();
+    $('#ck').onsubmit=async e=>{
+      e.preventDefault(); const b=e.target.querySelector('button'); b.disabled=true; $('#ckerr').textContent='';
+      const name=$('#ckn').value, phone=$('#ckp').value; let res;
+      try{ res=API?(await api('/api/checkin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:tok,name,phone})})).data:localCheckin(tok,name,phone); }
+      catch(_){ res={ok:false,code:'network'}; }
+      b.disabled=false;
+      if(res?.ok) return done(res);
+      $('#ckerr').textContent=CK_ERR[res?.code]||CK_ERR.network;
+    };
+  };
+  const done=res=>{
+    app.innerHTML=ckShell(`<div class="ck-ic">${icon('check',34)}</div>
+      <h1>${res.already?'You were already checked in':'You\'re checked in'}, ${esc(res.first_name)}!<span>${res.already?'Su asistencia ya estaba registrada.':'¡Su asistencia quedó registrada!'}</span></h1>
+      ${meta}<button class="btn secondary block lg" id="again">Next person / Siguiente persona</button>`);
+    $('#again').onclick=form;
+  };
+  form();
+}
+
+/* ================= Router ================= */
+function route(){
+  const [path,qs]=(location.hash.slice(2)||'overview').split('?');
+  const [t,action,id]=path.split('/'); const q=new URLSearchParams(qs||'');
+  VIEW={};
+  if(t==='checkin') return checkinView(action||'');
+  document.body.classList.remove('kiosk');
+  const cur=E[t]||t==='overview'||t==='attendance'?t:'overview';
+  const pendN=allPending().length;
+  $('#nav').innerHTML=TABS.map(([k,l,ic])=>!l?`<span class="ng">${k}</span>`:`<a href="#/${k}" class="${k===cur?'active':''}" ${k===cur?'aria-current="page"':''}>${icon(ic)}${l}${E[k]?`<span class="n">${db[k].length}</span>`:k==='attendance'&&pendN?`<span class="n warn" title="${pendN} past classes without attendance">${pendN}</span>`:''}</a>`).join('');
+  $('#foot').innerHTML=CLOUD?`<span>${icon('wifi',14)} Online · data shared by all staff<br><a href="#" id="logout">Sign out</a></span>`
+    :SYNC?icon('wifi',14)+'Server on · QR check-in ready'
+    :FILE_MODE?`<span>${icon('db',14)} Offline version · QR for phones is off<br><a href="#" data-move>Move my data to the online version</a></span>`
+    :icon('db',14)+'Saved in this browser';
+  wireMove();
+  const lo=$('#logout'); if(lo) lo.onclick=e=>{ e.preventDefault(); logout(); };
+  document.title=(E[t]?E[t].many+' · ':t==='attendance'?'Attendance · ':'')+'Parent Resource Centers';
+  window.scrollTo(0,0);
+  if(t==='receive') return receiveView();
+  if(t==='attendance') return action?attendanceView(Number(action),q):attendanceHome();
+  if(!E[t]) return overview();
+  if(t==='enrollments'&&action==='bulk') return bulkView(q);
+  if(action==='new'){ // values passed in the link, e.g. #/enrollments/new?student_id=3
+    const preset={}; q.forEach((v,k)=>{ preset[k]=/_id$/.test(k)?Number(v):v; });
+    return formView(t,null,Object.keys(preset).length?preset:null);
+  }
+  if(action==='edit') return formView(t,Number(id));
+  if(action==='view'&&t==='sections') return sectionView(Number(id));
+  if(action==='view'&&t==='students') return studentView(Number(id));
+  listView(t);
+}
+document.addEventListener('keydown',e=>{ if(e.key==='/'&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){ const s=$('#q')||$('#bq'); if(s){ e.preventDefault(); s.focus(); } } });
+// Another tab (e.g. the kiosk) changed the data
+window.addEventListener('storage',e=>{ if(!CLOUD&&e.key===KEY&&!location.hash.startsWith('#/checkin')){ db=load(); VIEW.refresh?.(); } });
+
+async function init(){
+  if(location.protocol.startsWith('http')){
+    try{
+      const i=await api('/api/info');
+      if(i.ok&&i.data?.mode==='cloud'){
+        // Online version: parents' check-in page needs no sign-in; everything else does
+        API=i.data; CLOUD=true;
+        window.addEventListener('hashchange',()=>{ if(SYNC||location.hash.startsWith('#/checkin')) route(); });
+        if(location.hash.startsWith('#/checkin')){ db=blank(); return route(); }
+        if(await cloudLoad()){ startSync(); return route(); }
+        return loginView();
+      }
+      if(i.ok&&i.data?.port){
+        API=i.data;
+        if(API.local){ const d=await api('/api/data'); if(d.ok){ SYNC=true; if(d.data&&Array.isArray(d.data.terms)){ db=normalize(d.data); try{ localStorage.setItem(KEY,JSON.stringify(db)); }catch(e){} } } }
+      }
+    }catch(e){}
+  }
+  if(!location.hash.startsWith('#/checkin')){
+    if(!db) db=load();
+    if(SYNC){ pushServer(); startSync(); }
+  }
+  window.addEventListener('hashchange',route);
+  route();
+}
+init();
+</script>
+</body>
+</html>
